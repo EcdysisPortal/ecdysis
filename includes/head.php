@@ -37,3 +37,4 @@ if($activateJQuery){
     const pageTitle = document.querySelector('#innertext h1');
     addTooltip(pageTitle.parentNode, pageTooltipText);
   })
+</script>
