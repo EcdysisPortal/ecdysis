@@ -6,9 +6,7 @@
 			<div style="text-align:center;margin-bottom:15px"><a href="https://symbiota.org/" target="_blank">About Symbiota <img src="<?php echo $CLIENT_ROOT; ?>/images/layout/logo_symbiota.png" style="width:150px" /></a> <a href="https://biokic.github.io/symbiota-docs/" target="_blank">Symbiota help</a></div>
 
 			<p style="text-align:center">
-				<a href="https://www.nsf.gov" target="_blank"><img src="<?php echo $CLIENT_ROOT; ?>/images/layout/logo_nsf.gif" style="width:50px" /></a>
-				<a href="http://idigbio.org" target="_blank" title="iDigBio"><img src="<?php echo $CLIENT_ROOT; ?>/images/layout/logo_idig.png" style="width:150px" /></a>
-				<a href="https://biokic.asu.edu" target="_blank" title="Biodiversity Knowledge Integration Center"><img src="<?php echo $CLIENT_ROOT; ?>/images/layout/logo-asu-biokic.png" style="width:180px" /></a>
+				<a href="https://biokic.asu.edu" target="_blank" title="Biodiversity Knowledge Integration Center"><img src="<?php echo $CLIENT_ROOT; ?>/images/layout/logo-asu-biokic.png" style="width:250px" /></a>
 			</p>
 		</td>
 	</tr>
