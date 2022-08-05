@@ -24,3 +24,16 @@ if($activateJQuery){
 <link rel="icon" type="image/png" sizes="16x16" href="<?php echo $CLIENT_ROOT; ?>/images/favicon-16x16.png">
 <link rel="manifest" href="<?php echo $CLIENT_ROOT; ?>/images/site.webmanifest">
 <link rel="mask-icon" href="<?php echo $CLIENT_ROOT; ?>/images/safari-pinned-tab.svg" color="#5bbad5">
+
+<!-- Symbiota Tooltips -->
+<link href="<?php echo $CLIENT_ROOT; ?>/css/symb/tooltips.css?ver=1" type="text/css" rel="stylesheet">
+<script src="<?php echo $CLIENT_ROOT; ?>/js/symb/symbiota.tooltips.js" defer></script>
+<script type="text/javascript">
+  document.addEventListener("DOMContentLoaded", async function(){
+    const relFilePath = <?php echo (json_encode($relFilePath)); ?>;
+    const langTag = <?php echo (json_encode($LANG_TAG)); ?>;
+    // console.log('relfilepath ' + relFilePath);
+    const pageTooltipText = await getTooltip(relFilePath, langTag);
+    const pageTitle = document.querySelector('#innertext h1');
+    addTooltip(pageTitle.parentNode, pageTooltipText);
+  })
