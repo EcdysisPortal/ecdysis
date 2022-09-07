@@ -1,5 +1,4 @@
 <?php
-include_once($SERVER_ROOT.'/config/dbconnection.php');
 include_once($SERVER_ROOT.'/classes/Manager.php');
 include_once($SERVER_ROOT.'/classes/TaxonomyUtilities.php');
 include_once($SERVER_ROOT.'/classes/EOLUtilities.php');
@@ -353,7 +352,7 @@ class TaxonomyHarvester extends Manager{
 			if(!$name && isset($tArr['usage']['name']['scientificName'])) $name = $tArr['usage']['name']['scientificName'];
 			if($name){
 				$url = 'https://api.catalogueoflife.org/nameusage/search?content=SCIENTIFIC_NAME&q='.str_replace(' ','%20',$name).'&offset=0&limit=100&type=EXACT';
-				//echo $url.'<br/>';
+				//echo 'COL ULR: '.$url.'<br/>';
 				$retArr = $this->getContentString($url);
 				$content = $retArr['str'];
 				$resultArr = json_decode($content,true);
@@ -575,7 +574,7 @@ class TaxonomyHarvester extends Manager{
 		$url = 'https://marinespecies.org/rest/AphiaRecordByAphiaID/'.$id;
 		if($resultStr = $this->getWormsReturnStr($this->getContentString($url),$url)){
 			$taxonArr= $this->getWormsNode(json_decode($resultStr,true));
-			
+
 			$taxonKingdom = $taxonArr['kingdom'];
 			if($this->kingdomName && $this->kingdomName != $taxonKingdom){
 				//Skip if kingdom doesn't match target kingdom
@@ -1006,7 +1005,7 @@ class TaxonomyHarvester extends Manager{
 						if($parentTid) $taxonArr['parent']['tid'] = $parentTid;
 					}
 					if(isset($unitArr['taxonomicStatus']) && $unitArr['taxonomicStatus'] != 'accepted' && isset($unitArr['acceptedNameUsage'])){
-						$acceptedArr = TaxonomyUtilities::parseScientificName($unitArr['acceptedNameUsage'], 0, $this->kingdomName);
+						$acceptedArr = TaxonomyUtilities::parseScientificName($unitArr['acceptedNameUsage'], $this->conn, $this->kingdomName);
 						$tidAccepted = $this->getTid($taxonArr);
 						if(!$tidAccepted) $tidAccepted = $this->addBryoNamesTaxon($acceptedArr);
 					}
