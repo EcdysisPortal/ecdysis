@@ -17,10 +17,8 @@ $LANG['H_IMAGES'] = 'Im&aacute;genes';
 $LANG['H_IMAGE_BROWSER'] = 'Navegador de Imágenes';
 $LANG['H_IMAGE_SEARCH'] = 'Búsqueda de Imágenes';
 
-$LANG['H_INVENTORIES'] = 'Biota de L&iacute;quenes';
-$LANG['H_CENTRAL_AMER'] = 'AmÃ©rica Central';
-$LANG['H_ECUADOR'] = 'Ecuador';
-$LANG['H_SUBPOLAR'] = 'RegiÃ³n Subpolar del Sur';
+$LANG['H_INVENTORIES'] = 'Lista de Especies';
+
 
 $LANG['H_MORE_INFO'] = 'M&aacute;s Informaci&oacute;n';
 $LANG['H_SYMBIOTA'] = 'Symbiota';
