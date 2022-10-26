@@ -76,10 +76,11 @@ class KeyDataManager extends Manager {
 					"HAVING (((cs.CID) In (".implode(",",$charList).")) AND ((cs.CS)<>'-') AND ((characters.Type)='UM' Or (characters.Type)='OM') AND characters.DifficultyRank < 3) ".
 					"ORDER BY charnames.Heading, characters.SortSequence, cs.SortSequence";*/
 				$sqlChar = 'SELECT DISTINCT cs.CID, cs.CS, cs.CharStateName, cs.Description AS csdescr, chars.CharName,
-					chars.description AS chardescr, chars.hid, chead.headingname, chars.glossid, chars.helpurl, Count(cs.CS) AS Ct, chars.DifficultyRank
+					chars.description AS chardescr, chars.hid, chead.headingname, chars.glossid, chars.helpurl, Count(cs.CS) AS Ct, chars.DifficultyRank, csimg.url as imgUrl
 					FROM ('.$this->sql.') AS tList INNER JOIN kmdescr d ON tList.TID = d.TID
 					INNER JOIN kmcs cs ON (d.CS = cs.CS) AND (d.CID = cs.CID)
 					INNER JOIN kmcharacters chars ON chars.cid = cs.CID
+					LEFT JOIN kmcsimages csimg ON (cs.CS = csimg.cs) AND (cs.CID = csimg.cid)
 					LEFT JOIN kmcharheading chead ON chars.hid = chead.hid
 					GROUP BY chead.language, cs.CID, cs.CS, cs.CharStateName, chars.CharName, chead.headingname, chars.helpurl, chars.DifficultyRank, chars.chartype
 					HAVING (chead.language = "English" OR chead.language IS NULL) AND (cs.CID In ('.implode(",",$charList).')) AND (cs.CS <> "-") AND (chars.chartype="UM" Or chars.chartype = "OM") AND (chars.DifficultyRank < 3)
@@ -122,6 +123,7 @@ class KeyDataManager extends Manager {
 						}
 						$charStateName = $row->CharStateName;
 						if($row->csdescr) $charStateName = '<span class="characterStateName" title="'.$row->csdescr.'">'.$row->CharStateName.'</span>';
+						if($row->imgurl) $charStateName .= ' <a class="infoAnchor" href="'.$row->imgurl'" target="_blank" title="'.$row->CharStateName.'"><img src="../images/image.png"></a>';
 						$headingArray[$headingID][$charCID][$cs][$language] = $charStateName;
 					}
 				}
