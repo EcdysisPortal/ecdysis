@@ -205,7 +205,7 @@ class KeyDataManager extends Manager {
 					HAVING (chead.language = "English" OR chead.language IS NULL) AND (cs.CID In ('.implode(",",$charList).')) AND (cs.CS <> "-")
 					AND (chars.chartype="UM" Or chars.chartype = "OM") AND (chars.DifficultyRank < 3)
 					ORDER BY chead.hid,	chars.SortSequence, cs.SortSequence ';
-				echo $sqlChar.'<br/>';
+				//echo $sqlChar.'<br/>';
 				$rs = $this->conn->query($sqlChar);
 
 				//Process recordset
@@ -247,7 +247,7 @@ class KeyDataManager extends Manager {
 						$charStateName = $r->CharStateName;
 						if($r->csdescr) $charStateName = '<span class="characterStateName" title="'.$r->csdescr.'">'.$r->CharStateName.'</span>';
 						if($r->csglossid) $charStateName .= ' <a class="infoAnchor" href="" onclick="openGlossaryPopup('.$r->csglossid.');return false;" title="glossary term"><img src="../images/info.png"></a>';
-						if($row->imgurl) $charStateName .= ' <a class="infoAnchor" href="'.$row->imgurl.'" target="_blank" title="'.$row->csdesc.'"><img src="../images/image.png"><p>hello</p></a>';
+						$charStateName .= ' <a class="infoAnchor" href="'.$row->imgurl.'" target="_blank" title="'.$row->csdesc.'"><img src="../images/image.png"><p>hello</p></a>';
 						$headingArray[$headingID][$charCID][$cs][$language] = $charStateName;
 					}
 				}
