@@ -195,7 +195,7 @@ class KeyDataManager extends Manager {
 
 			if($charList){
 				$sqlChar = 'SELECT DISTINCT cs.CID, cs.CS, cs.CharStateName, cs.Description AS csdescr, cs.glossid AS csglossid, chars.CharName,
-					chars.description AS chardescr, chars.hid, chead.headingname, chars.glossid AS charglossid, chars.helpurl, Count(cs.CS) AS Ct, chars.DifficultyRank, csimg.url as imgurl
+					chars.description AS chardescr, chars.hid, chead.headingname, chars.glossid AS charglossid, chars.helpurl, Count(cs.CS) AS Ct, chars.DifficultyRank, csimg.url AS imgurl
 					FROM ('.$this->sql.') AS tList INNER JOIN kmdescr d ON tList.TID = d.TID
 					INNER JOIN kmcs cs ON (d.CS = cs.CS) AND (d.CID = cs.CID)
 					INNER JOIN kmcharacters chars ON chars.cid = cs.CID
@@ -247,7 +247,7 @@ class KeyDataManager extends Manager {
 						$charStateName = $r->CharStateName;
 						if($r->csdescr) $charStateName = '<span class="characterStateName" title="'.$r->csdescr.'">'.$r->CharStateName.'</span>';
 						if($r->csglossid) $charStateName .= ' <a class="infoAnchor" href="" onclick="openGlossaryPopup('.$r->csglossid.');return false;" title="glossary term"><img src="../images/info.png"></a>';
-						$charStateName .= ' <a class="infoAnchor" href="'.$row->imgurl.'" target="_blank" title="'.$row->csdesc.'"><img src="../images/image.png"><p>hello</p></a>';
+						if($row->imgurl) $charStateName .= ' <a class="infoAnchor" href="'.$row->imgurl.'" target="_blank" title="'.$row->csdesc.'"><img src="../images/image.png"><p>hello</p></a>';
 						$headingArray[$headingID][$charCID][$cs][$language] = $charStateName;
 					}
 				}
