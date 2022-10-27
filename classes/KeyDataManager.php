@@ -123,7 +123,7 @@ class KeyDataManager extends Manager {
 						}
 						$charStateName = $row->CharStateName;
 						if($row->csdescr) $charStateName = '<span class="characterStateName" title="'.$row->csdescr.'">'.$row->CharStateName.'</span>';
-						//if($row->imgurl) $charStateName .= ' <a class="infoAnchor" href="'.$row->imgurl'" target="_blank" title="'.$row->CharStateName.'"><img src="../images/image.png"></a>';
+						if($row->imgurl) $charStateName .= ' <a class="infoAnchor" href="'.$row->imgurl'" target="_blank" title="'.$row->csdesc.'"><img src="../images/image.png"></a>';
 						$headingArray[$headingID][$charCID][$cs][$language] = $charStateName;
 					}
 				}
