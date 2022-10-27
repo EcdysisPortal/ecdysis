@@ -85,7 +85,7 @@ class KeyDataManager extends Manager {
 					GROUP BY chead.language, cs.CID, cs.CS, cs.CharStateName, chars.CharName, chead.headingname, chars.helpurl, chars.DifficultyRank, chars.chartype
 					HAVING (chead.language = "English" OR chead.language IS NULL) AND (cs.CID In ('.implode(",",$charList).')) AND (cs.CS <> "-") AND (chars.chartype="UM" Or chars.chartype = "OM") AND (chars.DifficultyRank < 3)
 					ORDER BY chead.hid,	chars.SortSequence, cs.SortSequence ';
-				//echo $sqlChar.'<br/>';
+				echo $sqlChar.'<br/>';
 				$result = $this->conn->query($sqlChar);
 
 				//Process recordset
