@@ -80,7 +80,7 @@ class KeyDataManager extends Manager {
 					FROM ('.$this->sql.') AS tList INNER JOIN kmdescr d ON tList.TID = d.TID
 					INNER JOIN kmcs cs ON (d.CS = cs.CS) AND (d.CID = cs.CID)
 					INNER JOIN kmcharacters chars ON chars.cid = cs.CID
-					LEFT JOIN kmcsimages csimg ON (cs.CS = csimg.cs) AND (cs.CID = csimg.cid)
+					LEFT JOIN kmcsimages csimg ON (csimg.CS = cs.CS) AND (cs.CID = csimg.CID)
 					LEFT JOIN kmcharheading chead ON chars.hid = chead.hid
 					GROUP BY chead.language, cs.CID, cs.CS, cs.CharStateName, chars.CharName, chead.headingname, chars.helpurl, chars.DifficultyRank, chars.chartype
 					HAVING (chead.language = "English" OR chead.language IS NULL) AND (cs.CID In ('.implode(",",$charList).')) AND (cs.CS <> "-") AND (chars.chartype="UM" Or chars.chartype = "OM") AND (chars.DifficultyRank < 3)
@@ -123,7 +123,7 @@ class KeyDataManager extends Manager {
 						}
 						$charStateName = $row->CharStateName;
 						if($row->csdescr) $charStateName = '<span class="characterStateName" title="'.$row->csdescr.'">'.$row->CharStateName.'</span>';
-						if($row->imgurl) $charStateName .= ' <a href="'.$row->imgurl.'" target="_blank" title="'.$row->csdesc.'"><img src="../images/image.png"><p>hello</p></a>';
+						$charStateName .= ' <a href="'.$row->imgurl.'" target="_blank" title="'.$row->csdesc.'"><img src="../images/image.png"><p>hello</p></a>';
 						$headingArray[$headingID][$charCID][$cs][$language] = $charStateName;
 					}
 				}
