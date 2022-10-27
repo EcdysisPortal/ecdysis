@@ -200,7 +200,7 @@ class KeyDataManager extends Manager {
 					INNER JOIN kmcs cs ON (d.CS = cs.CS) AND (d.CID = cs.CID)
 					INNER JOIN kmcharacters chars ON chars.cid = cs.CID
 					LEFT JOIN kmcharheading chead ON chars.hid = chead.hid
-					LEFT JOIN kmcsimages csimg ON (cs.CS = csimg.cs) AND (cs.CID = csimg.cid)
+					INNER JOIN kmcsimages csimg ON (cs.CS = csimg.CS) AND (cs.CID = csimg.CID)
 					GROUP BY chead.language, cs.CID, cs.CS, cs.CharStateName, chars.CharName, chead.headingname, chars.helpurl, chars.DifficultyRank, chars.chartype
 					HAVING (chead.language = "English" OR chead.language IS NULL) AND (cs.CID In ('.implode(",",$charList).')) AND (cs.CS <> "-")
 					AND (chars.chartype="UM" Or chars.chartype = "OM") AND (chars.DifficultyRank < 3)
