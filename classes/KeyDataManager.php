@@ -247,7 +247,7 @@ class KeyDataManager extends Manager {
 						$charStateName = $r->CharStateName;
 						if($r->csdescr) $charStateName = '<span class="characterStateName" title="'.$r->csdescr.'">'.$r->CharStateName.'</span>';
 						if($r->csglossid) $charStateName .= ' <a class="infoAnchor" href="" onclick="openGlossaryPopup('.$r->csglossid.');return false;" title="glossary term"><img src="../images/info.png"></a>';
-						if($r->csimgurl) $charStateName .= ' <a class="infoAnchor" href="'.$r->csimgurl.'" target="_blank" title="'.$r->csdesc.'"><img src="../images/image.png"></a>';
+						if($r->csimgurl) $charStateName .= ' <a class="infoAnchor" href="'.$r->csimgurl.'" target="_blank" title="'Character State Image'"><img src="../images/image.png"></a>';
 						$headingArray[$headingID][$charCID][$cs][$language] = $charStateName;
 					}
 				}
