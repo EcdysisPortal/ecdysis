@@ -102,4 +102,9 @@ $LANG['TAXON_DIST'] = 'Taxon Distribution';
 $LANG['CLICK_ON_SPEC_FAM'] = 'Click on the specimen record counts within the parenthesis to return the records for that family';
 $LANG['GEOG_DIST_COUNTRIES'] = 'Geographic Distribution - Countries';
 $LANG['COLLECTION_PROJECTS'] = 'Natural History Collections and Observation Projects';
+$LANG['TAXON'] = 'Taxon';
+$LANG['CAT_NUM'] = 'Catalog Number';
+$LANG['QUICK_SEARCH'] = 'Quick Search';
+$LANG['CITATION'] = 'Cite this collection:';
+
 ?>
