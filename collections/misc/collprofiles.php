@@ -120,6 +120,13 @@ if ($SYMB_UID) {
 								<input name="collid" type="hidden" value="<?php echo $collid; ?>" />
 								<input name="occindex" type="hidden" value="0" />
 							</form>
+							<b><?php echo (isset($LANG['TAXON']) ? $LANG['TAXON'] : 'Taxon'); ?></b><br />
+							<form name="quicksearchtaxon" action="<?php echo $CLIENT_ROOT; ?>/collections/list.php" method="get" target="_blank">
+								<input name="taxa" type="text" />
+								<input name="db" type="hidden" value="<?php echo $collid; ?>" />
+								<input name="usethes" type="hidden" value="1" />
+							</form>
+							
 						</fieldset>
 						<ul>
 							<?php
@@ -418,7 +425,9 @@ if ($SYMB_UID) {
 					}
 				}
 				if (file_exists($SERVER_ROOT . '/includes/citationcollection.php')) {
-					echo '<div class="field-div"><span class="label">Cite this collection:</span><blockquote>';
+					echo '<div class="field-div"><span class="label">';
+					echo (isset($LANG['CITATION']) ? $LANG['CITATION'] : 'Cite this collection:');
+					echo'</span><blockquote>';
 					// If GBIF dataset key is available, fetch GBIF format from API
 					if ($collData['publishtogbif'] && $datasetKey && file_exists($SERVER_ROOT . '/includes/citationgbif.php')) {
 						$gbifUrl = 'http://api.gbif.org/v1/dataset/' . $datasetKey;
