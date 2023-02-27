@@ -22,6 +22,7 @@ class MediaResolutionTools extends Manager {
 	private $imgRootUrl;
 	private $imgRootPath;
 	private $imgSubPath;
+	private $sourcePathPrefix;
 
 	private $debugMode = false;
 
@@ -288,8 +289,7 @@ class MediaResolutionTools extends Manager {
 								if($this->transferThumbnail){
 									$fileName = basename($r->thumbnailurl);
 									$targetPath = $this->imgRootPath.$pathFrag.$fileName;
-									$thumnPath = $r->thumbnailurl;
-									if(strpos($thumnPath, $GLOBALS['IMAGE_ROOT_URL']) !== false) $thumnPath = str_replace($GLOBALS['IMAGE_ROOT_URL'], $GLOBALS['IMAGE_ROOT_PATH'], $thumnPath);
+									$thumnPath = $this->getLocalPath($r->thumbnailurl);
 									if(copy($thumnPath, $targetPath)){
 										$imgArr[$r->imgid]['tn'] = $targetPath;
 										if($this->debugMode) $this->logOrEcho('Copied: '.$thumnPath.' => '.$targetPath,1);
@@ -303,8 +303,7 @@ class MediaResolutionTools extends Manager {
 								if($this->transferWeb){
 									$fileName = basename($r->url);
 									$targetPath = $this->imgRootPath.$pathFrag.$fileName;
-									$urlPath = $r->url;
-									if(strpos($urlPath, $GLOBALS['IMAGE_ROOT_URL']) !== false) $urlPath = str_replace($GLOBALS['IMAGE_ROOT_URL'], $GLOBALS['IMAGE_ROOT_PATH'], $urlPath);
+									$urlPath = $this->getLocalPath($r->url);
 									if(copy($urlPath, $targetPath)){
 										$imgArr[$r->imgid]['web'] = $targetPath;
 										if($this->debugMode) $this->logOrEcho('Copied: '.$urlPath.' => '.$targetPath,1);
@@ -318,8 +317,7 @@ class MediaResolutionTools extends Manager {
 								if($this->transferLarge){
 									$fileName = basename($r->originalurl);
 									$targetPath = $this->imgRootPath.$pathFrag.$fileName;
-									$origPath = $r->originalurl;
-									if(strpos($origPath, $GLOBALS['IMAGE_ROOT_URL']) !== false) $origPath = str_replace($GLOBALS['IMAGE_ROOT_URL'], $GLOBALS['IMAGE_ROOT_PATH'], $origPath);
+									$origPath = $this->getLocalPath($r->originalurl);
 									if(copy($origPath, $targetPath)){
 										$imgArr[$r->imgid]['lg'] = $targetPath;
 										if($this->debugMode) $this->logOrEcho('Copied: '.$origPath.' => '.$targetPath,1);
@@ -346,6 +344,31 @@ class MediaResolutionTools extends Manager {
 			}
 		}
 		return $imgIdStart;
+	}
+
+	private function getLocalPath($imageUrl){
+		if($this->sourcePathPrefix){
+			$adjustedUrl = str_replace($this->sourcePathPrefix, $GLOBALS['IMAGE_ROOT_PATH'], $imageUrl);
+			if(file_exists($adjustedUrl)) return $adjustedUrl;
+		}
+		if(file_exists($imageUrl)){
+			return $imageUrl;
+		}
+		if(strpos($imageUrl, $GLOBALS['IMAGE_ROOT_URL']) !== false){
+			$adjustedUrl = str_replace($GLOBALS['IMAGE_ROOT_URL'], $GLOBALS['IMAGE_ROOT_PATH'], $imageUrl);
+			if(file_exists($adjustedUrl)) return $adjustedUrl;
+		}
+		$sourcePathPrefix = '';
+		$fragArr = explode('/', $imageUrl);
+		while($fragArr){
+			$sourcePathPrefix .= '/'.array_shift($fragArr);
+			$testPath = $GLOBALS['IMAGE_ROOT_PATH'].'/'.implode('/', $fragArr);
+			if(file_exists($testPath)){
+				$this->sourcePathPrefix = $sourcePathPrefix;
+				return $testPath;
+			}
+		}
+		return $imageUrl;
 	}
 
 	private function databaseImageArr($imgArr){
