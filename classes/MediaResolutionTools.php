@@ -250,7 +250,6 @@ class MediaResolutionTools extends Manager {
 	public function migrateCollectionDerivatives($imgIdStart, $limit){
 		//Migrates images based on catalog number; NULL or weak catalogNumbers are skipped
 		ini_set('max_execution_time', 3600);
-		$this->debugMode = true;
 		if($this->collid && is_numeric($limit) && $this->imgRootUrl && $this->imgRootPath){
 			if($this->transferThumbnail || $this->transferWeb || $this->transferLarge){
 				if($this->matchTermThumbnail || $this->matchTermWeb || $this->matchTermLarge){
@@ -279,13 +278,13 @@ class MediaResolutionTools extends Manager {
 						$rs = $this->conn->query($sql);
 						while($r = $rs->fetch_object()){
 							$imgIdStart = $r->imgid;
-							if(preg_match('/^\D*(\d+)$/',$r->catalognumber,$m)){
-								$catNum = $m[1];
+							if(preg_match('/^(\D*)(\d+)$/',$r->catalognumber,$m)){
+								$catNum = $m[2];
 								if(!$catNum) continue;
 								if(strlen($catNum)<8) $catNum = str_pad($catNum,8,'0',STR_PAD_LEFT);
-								$pathFrag = substr($catNum,0,strlen($catNum)-4).'/';
+								$pathFrag = $m[1].substr($catNum,0,strlen($catNum)-4).'/';
 								if(!file_exists($this->imgRootPath.$pathFrag)) mkdir($this->imgRootPath.$pathFrag);
-								if($this->debugMode) $this->logOrEcho($processingCnt.': Processing: <a href="../../individual/index.php?occid='.$r->occid.'" target="_blank">'.$r->occid.'</a>');
+								$this->logOrEcho($processingCnt.': Processing: <a href="../../individual/index.php?occid='.$r->occid.'" target="_blank">'.$r->occid.'</a>');
 								if($this->transferThumbnail){
 									$fileName = basename($r->thumbnailurl);
 									$targetPath = $this->imgRootPath.$pathFrag.$fileName;
@@ -293,7 +292,7 @@ class MediaResolutionTools extends Manager {
 									$thumbPath = $this->getLocalPath($r->thumbnailurl);
 									if(copy($thumbPath, $targetPath)){
 										$imgArr[$r->imgid]['tn'] = $targetUrl;
-										if($this->debugMode) $this->logOrEcho('Copied: '.$thumbPath.' => '.$targetPath,1);
+										$this->logOrEcho('Copied: '.$thumbPath.' => '.$targetPath,1);
 										if($this->deleteSource){
 											if(unlink($thumbPath)){
 												$this->logOrEcho('Source deleted: '.$thumbPath,1);
@@ -311,7 +310,7 @@ class MediaResolutionTools extends Manager {
 									$urlPath = $this->getLocalPath($r->url);
 									if(copy($urlPath, $targetPath)){
 										$imgArr[$r->imgid]['web'] = $targetUrl;
-										if($this->debugMode) $this->logOrEcho('Copied: '.$urlPath.' => '.$targetPath,1);
+										$this->logOrEcho('Copied: '.$urlPath.' => '.$targetPath,1);
 										if($this->deleteSource){
 											if(unlink($urlPath)){
 												$this->logOrEcho('Source delete: '.$urlPath,1);
@@ -329,7 +328,7 @@ class MediaResolutionTools extends Manager {
 									$origPath = $this->getLocalPath($r->originalurl);
 									if(copy($origPath, $targetPath)){
 										$imgArr[$r->imgid]['lg'] = $targetUrl;
-										if($this->debugMode) $this->logOrEcho('Copied: '.$origPath.' => '.$targetPath,1);
+										$this->logOrEcho('Copied: '.$origPath.' => '.$targetPath,1);
 										if($this->deleteSource){
 											if(unlink($origPath)){
 												$this->logOrEcho('Source deleted: '.$origPath,1);
