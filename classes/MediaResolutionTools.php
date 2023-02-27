@@ -289,13 +289,13 @@ class MediaResolutionTools extends Manager {
 								if($this->transferThumbnail){
 									$fileName = basename($r->thumbnailurl);
 									$targetPath = $this->imgRootPath.$pathFrag.$fileName;
-									$thumnPath = $this->getLocalPath($r->thumbnailurl);
-									if(copy($thumnPath, $targetPath)){
+									$thumbPath = $this->getLocalPath($r->thumbnailurl);
+									if(copy($thumbPath, $targetPath)){
 										$imgArr[$r->imgid]['tn'] = $targetPath;
-										if($this->debugMode) $this->logOrEcho('Copied: '.$thumnPath.' => '.$targetPath,1);
+										if($this->debugMode) $this->logOrEcho('Copied: '.$thumbPath.' => '.$targetPath,1);
 										if($this->deleteSource){
-											if(unlink($thumnPath)){
-												$this->logOrEcho('Source removed: '.$thumnPath,1);
+											if(unlink($thumbPath)){
+												$this->logOrEcho('Source removed: '.$thumbPath,1);
 											}
 										}
 									}
@@ -358,15 +358,10 @@ class MediaResolutionTools extends Manager {
 			$adjustedUrl = str_replace($GLOBALS['IMAGE_ROOT_URL'], $GLOBALS['IMAGE_ROOT_PATH'], $imageUrl);
 			if(file_exists($adjustedUrl)) return $adjustedUrl;
 		}
-		$sourcePathPrefix = '';
-		$fragArr = explode('/', $imageUrl);
-		while($fragArr){
-			$sourcePathPrefix .= '/'.array_shift($fragArr);
-			$testPath = $GLOBALS['IMAGE_ROOT_PATH'].'/'.implode('/', $fragArr);
-			if(file_exists($testPath)){
-				$this->sourcePathPrefix = $sourcePathPrefix;
-				return $testPath;
-			}
+		$prefix = substr($GLOBALS['IMAGE_ROOT_PATH'], 0, strlen($GLOBALS['IMAGE_ROOT_PATH']) - strlen($GLOBALS['IMAGE_ROOT_URL']));
+		if(file_exists($prefix.$imageUrl)){
+			$this->sourcePathPrefix = $prefix;
+			return $prefix.$imageUrl;
 		}
 		return $imageUrl;
 	}
