@@ -289,13 +289,17 @@ class MediaResolutionTools extends Manager {
 								if($this->transferThumbnail){
 									$fileName = basename($r->thumbnailurl);
 									$targetPath = $this->imgRootPath.$pathFrag.$fileName;
+									$targetUrl = $this->imgRootUrl.$pathFrag.$fileName;
 									$thumbPath = $this->getLocalPath($r->thumbnailurl);
 									if(copy($thumbPath, $targetPath)){
-										$imgArr[$r->imgid]['tn'] = $targetPath;
+										$imgArr[$r->imgid]['tn'] = $targetUrl;
 										if($this->debugMode) $this->logOrEcho('Copied: '.$thumbPath.' => '.$targetPath,1);
 										if($this->deleteSource){
 											if(unlink($thumbPath)){
-												$this->logOrEcho('Source removed: '.$thumbPath,1);
+												$this->logOrEcho('Source deleted: '.$thumbPath,1);
+											}
+											else{
+												$this->logOrEcho('ERROR deleting source (file permissions?): '.$thumbPath,1);
 											}
 										}
 									}
@@ -303,13 +307,17 @@ class MediaResolutionTools extends Manager {
 								if($this->transferWeb){
 									$fileName = basename($r->url);
 									$targetPath = $this->imgRootPath.$pathFrag.$fileName;
+									$targetUrl = $this->imgRootUrl.$pathFrag.$fileName;
 									$urlPath = $this->getLocalPath($r->url);
 									if(copy($urlPath, $targetPath)){
-										$imgArr[$r->imgid]['web'] = $targetPath;
+										$imgArr[$r->imgid]['web'] = $targetUrl;
 										if($this->debugMode) $this->logOrEcho('Copied: '.$urlPath.' => '.$targetPath,1);
 										if($this->deleteSource){
 											if(unlink($urlPath)){
-												$this->logOrEcho('Source removed: '.$urlPath,1);
+												$this->logOrEcho('Source delete: '.$urlPath,1);
+											}
+											else{
+												$this->logOrEcho('ERROR deleting source (file permissions?): '.$urlPath,1);
 											}
 										}
 									}
@@ -317,13 +325,17 @@ class MediaResolutionTools extends Manager {
 								if($this->transferLarge){
 									$fileName = basename($r->originalurl);
 									$targetPath = $this->imgRootPath.$pathFrag.$fileName;
+									$targetUrl = $this->imgRootUrl.$pathFrag.$fileName;
 									$origPath = $this->getLocalPath($r->originalurl);
 									if(copy($origPath, $targetPath)){
-										$imgArr[$r->imgid]['lg'] = $targetPath;
+										$imgArr[$r->imgid]['lg'] = $targetUrl;
 										if($this->debugMode) $this->logOrEcho('Copied: '.$origPath.' => '.$targetPath,1);
 										if($this->deleteSource){
 											if(unlink($origPath)){
-												$this->logOrEcho('Source removed: '.$origPath,1);
+												$this->logOrEcho('Source deleted: '.$origPath,1);
+											}
+											else{
+												$this->logOrEcho('ERROR deleting source (file permissions?): '.$origPath,1);
 											}
 										}
 									}
