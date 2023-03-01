@@ -274,75 +274,78 @@ class MediaResolutionTools extends Manager {
 						$sql = 'SELECT i.imgid, i.thumbnailurl, i.url, i.originalurl, o.catalognumber, o.occid '.$sqlBase;
 						if($imgIdStart && is_numeric($imgIdStart)) $sql .= 'AND imgid > '.$imgIdStart.' ';
 						$sql .= 'ORDER BY imgid LIMIT 100';
-						//echo $sql.'<br/>';
+						//$this->logOrEcho('sql used: '. $sql);
 						$rs = $this->conn->query($sql);
 						while($r = $rs->fetch_object()){
 							$imgIdStart = $r->imgid;
-							if(preg_match('/^(\D*)(\d+)$/',$r->catalognumber,$m)){
+							$pathFrag = '';
+							if(preg_match('/^(\D*).*(\d{4,})/', $r->catalognumber, $m)){
 								$catNum = $m[2];
-								if(!$catNum) continue;
-								if(strlen($catNum)<8) $catNum = str_pad($catNum,8,'0',STR_PAD_LEFT);
-								$pathFrag = $m[1].substr($catNum,0,strlen($catNum)-4).'/';
-								if(!file_exists($this->imgRootPath.$pathFrag)) mkdir($this->imgRootPath.$pathFrag);
-								$this->logOrEcho($processingCnt.': Processing: <a href="../../individual/index.php?occid='.$r->occid.'" target="_blank">'.$r->occid.'</a>');
-								if($this->transferThumbnail && $r->thumbnailurl){
-									$fileName = basename($r->thumbnailurl);
-									$targetPath = $this->imgRootPath.$pathFrag.$fileName;
-									$targetUrl = $this->imgRootUrl.$pathFrag.$fileName;
-									$thumbPath = $this->getLocalPath($r->thumbnailurl);
-									if(copy($thumbPath, $targetPath)){
-										$imgArr[$r->imgid]['tn'] = $targetUrl;
-										$this->logOrEcho('Copied: '.$thumbPath.' => '.$targetPath,1);
-										if($this->deleteSource){
-											if(unlink($thumbPath)){
-												$this->logOrEcho('Source deleted: '.$thumbPath,1);
-											}
-											else{
-												$this->logOrEcho('ERROR deleting source (file permissions?): '.$thumbPath,1);
-											}
-										}
-									}
+								if($catNum){
+									if(strlen($catNum)<8) $catNum = str_pad($catNum,8,'0',STR_PAD_LEFT);
+									$pathFrag = $m[1].substr($catNum,0,strlen($catNum)-4).'/';
 								}
-								if($this->transferWeb && $r->url){
-									$fileName = basename($r->url);
-									$targetPath = $this->imgRootPath.$pathFrag.$fileName;
-									$targetUrl = $this->imgRootUrl.$pathFrag.$fileName;
-									$urlPath = $this->getLocalPath($r->url);
-									if(copy($urlPath, $targetPath)){
-										$imgArr[$r->imgid]['web'] = $targetUrl;
-										$this->logOrEcho('Copied: '.$urlPath.' => '.$targetPath,1);
-										if($this->deleteSource){
-											if(unlink($urlPath)){
-												$this->logOrEcho('Source delete: '.$urlPath,1);
-											}
-											else{
-												$this->logOrEcho('ERROR deleting source (file permissions?): '.$urlPath,1);
-											}
-										}
-									}
-								}
-								if($this->transferLarge && $r->originalurl){
-									$fileName = basename($r->originalurl);
-									$targetPath = $this->imgRootPath.$pathFrag.$fileName;
-									$targetUrl = $this->imgRootUrl.$pathFrag.$fileName;
-									$origPath = $this->getLocalPath($r->originalurl);
-									if(copy($origPath, $targetPath)){
-										$imgArr[$r->imgid]['lg'] = $targetUrl;
-										$this->logOrEcho('Copied: '.$origPath.' => '.$targetPath,1);
-										if($this->deleteSource){
-											if(unlink($origPath)){
-												$this->logOrEcho('Source deleted: '.$origPath,1);
-											}
-											else{
-												$this->logOrEcho('ERROR deleting source (file permissions?): '.$origPath,1);
-											}
-										}
-									}
-								}
-								$processingCnt++;
-								$limit--;
-								if($limit < 1) break;
 							}
+							if(!$pathFrag) $pathFrag = date('Ymd').'/';
+							if(!file_exists($this->imgRootPath.$pathFrag)) mkdir($this->imgRootPath.$pathFrag);
+							$this->logOrEcho($processingCnt.': Processing: <a href="../../individual/index.php?occid='.$r->occid.'" target="_blank">'.$r->occid.'</a>');
+							if($this->transferThumbnail && $r->thumbnailurl){
+								$fileName = basename($r->thumbnailurl);
+								$targetPath = $this->imgRootPath.$pathFrag.$fileName;
+								$targetUrl = $this->imgRootUrl.$pathFrag.$fileName;
+								$thumbPath = $this->getLocalPath($r->thumbnailurl);
+								if(copy($thumbPath, $targetPath)){
+									$imgArr[$r->imgid]['tn'] = $targetUrl;
+									$this->logOrEcho('Copied: '.$thumbPath.' => '.$targetPath,1);
+									if($this->deleteSource){
+										if(unlink($thumbPath)){
+											$this->logOrEcho('Source deleted: '.$thumbPath,1);
+										}
+										else{
+											$this->logOrEcho('ERROR deleting source (file permissions?): '.$thumbPath,1);
+										}
+									}
+								}
+							}
+							if($this->transferWeb && $r->url){
+								$fileName = basename($r->url);
+								$targetPath = $this->imgRootPath.$pathFrag.$fileName;
+								$targetUrl = $this->imgRootUrl.$pathFrag.$fileName;
+								$urlPath = $this->getLocalPath($r->url);
+								if(copy($urlPath, $targetPath)){
+									$imgArr[$r->imgid]['web'] = $targetUrl;
+									$this->logOrEcho('Copied: '.$urlPath.' => '.$targetPath,1);
+									if($this->deleteSource){
+										if(unlink($urlPath)){
+											$this->logOrEcho('Source delete: '.$urlPath,1);
+										}
+										else{
+											$this->logOrEcho('ERROR deleting source (file permissions?): '.$urlPath,1);
+										}
+									}
+								}
+							}
+							if($this->transferLarge && $r->originalurl){
+								$fileName = basename($r->originalurl);
+								$targetPath = $this->imgRootPath.$pathFrag.$fileName;
+								$targetUrl = $this->imgRootUrl.$pathFrag.$fileName;
+								$origPath = $this->getLocalPath($r->originalurl);
+								if(copy($origPath, $targetPath)){
+									$imgArr[$r->imgid]['lg'] = $targetUrl;
+									$this->logOrEcho('Copied: '.$origPath.' => '.$targetPath,1);
+									if($this->deleteSource){
+										if(unlink($origPath)){
+											$this->logOrEcho('Source deleted: '.$origPath,1);
+										}
+										else{
+											$this->logOrEcho('ERROR deleting source (file permissions?): '.$origPath,1);
+										}
+									}
+								}
+							}
+							$processingCnt++;
+							$limit--;
+							if($limit < 1) break;
 						}
 						$rs->free();
 						$this->databaseImageArr($imgArr);
