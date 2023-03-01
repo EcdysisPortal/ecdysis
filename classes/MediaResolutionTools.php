@@ -285,7 +285,7 @@ class MediaResolutionTools extends Manager {
 								$pathFrag = $m[1].substr($catNum,0,strlen($catNum)-4).'/';
 								if(!file_exists($this->imgRootPath.$pathFrag)) mkdir($this->imgRootPath.$pathFrag);
 								$this->logOrEcho($processingCnt.': Processing: <a href="../../individual/index.php?occid='.$r->occid.'" target="_blank">'.$r->occid.'</a>');
-								if($this->transferThumbnail){
+								if($this->transferThumbnail && $r->thumbnailurl){
 									$fileName = basename($r->thumbnailurl);
 									$targetPath = $this->imgRootPath.$pathFrag.$fileName;
 									$targetUrl = $this->imgRootUrl.$pathFrag.$fileName;
@@ -303,7 +303,7 @@ class MediaResolutionTools extends Manager {
 										}
 									}
 								}
-								if($this->transferWeb){
+								if($this->transferWeb && $r->url){
 									$fileName = basename($r->url);
 									$targetPath = $this->imgRootPath.$pathFrag.$fileName;
 									$targetUrl = $this->imgRootUrl.$pathFrag.$fileName;
@@ -321,7 +321,7 @@ class MediaResolutionTools extends Manager {
 										}
 									}
 								}
-								if($this->transferLarge){
+								if($this->transferLarge && $r->originalurl){
 									$fileName = basename($r->originalurl);
 									$targetPath = $this->imgRootPath.$pathFrag.$fileName;
 									$targetUrl = $this->imgRootUrl.$pathFrag.$fileName;
