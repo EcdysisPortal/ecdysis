@@ -22,8 +22,8 @@ else include_once($SERVER_ROOT.'/content/lang/header.'.$LANG_TAG.'.php');
 				} else {
 					?>
 					<span>
-						<a href="#">
-							Contact Us
+						<a href="<?php echo $CLIENT_ROOT . "/profile/newprofile.php?refurl=" . $_SERVER['SCRIPT_NAME'] . "?" . htmlspecialchars($_SERVER['QUERY_STRING'], ENT_QUOTES); ?>">
+							<?php echo (isset($LANG['H_NEW_ACCOUNT'])?$LANG['H_NEW_ACCOUNT']:'New Account')?>
 						</a>
 					</span>
 					<span class="button button-secondary">
@@ -36,10 +36,10 @@ else include_once($SERVER_ROOT.'/content/lang/header.'.$LANG_TAG.'.php');
 				?>
 			</nav>
 			<div class="top-brand">
-					<img src="<?php echo $CLIENT_ROOT; ?>/images/ecdysis_logo.png" alt="Ecdysis logo" style="width=80%">
+					<img src="<?php echo $CLIENT_ROOT; ?>/images/ecdysis_logo.png" alt="Ecdysis logo">
 				<div class="brand-name">
-					<h1 style="color:#ff7417;font-size:6rem">ecdysis</h1>
-					<h2 style="color:#ff7417"><?php echo (isset($LANG['H_SUBTITLE'])?$LANG['H_SUBTITLE']:'A portal for live-data arthropod collections')?></h2>
+					<h1 style="color:#ff8529;font-size:6rem">ecdysis</h1>
+					<h2 style="color:#ff8529;"><?php echo (isset($LANG['H_SUBTITLE'])?$LANG['H_SUBTITLE']:'A portal for live-data arthropod collections')?></h2>
 				</div>
 			</div>
 		</div>
