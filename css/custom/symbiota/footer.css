@@ -37,5 +37,17 @@ footer {
   footer p {
     font-size: 1.1rem;
     margin: 2px;
+    color: var(--header-font-color);
   }
+}
+
+footer a {
+  transition: all 0.2s ease-in-out;
+  color: var(--bright-color);
+  font-weight: 600;
+}
+
+footer a:hover {
+  color: var(--light-color);
+  cursor: pointer;
 }
