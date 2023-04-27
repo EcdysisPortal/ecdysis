@@ -13,7 +13,7 @@
 /**  --header-bg-image: url('../../../images/layout/header_background.jpg'); **/
   --header-bg-color: #005774; /** Transparent color if adding header bg-image [add 78 to end] **/
   --header-font-color: #17a2ff;
-  --brand-font-size: 4rem;
+  --brand-font-size: 3rem;
   --title-font-family: 'Averia Serif Libre', serif;
   --logo-width: 120px;
   --menu-top-bg-color: #003141;
@@ -23,7 +23,7 @@
   --body-font-family: 'Roboto', sans-serif;
   --footer-bg-color: #f2f0e9;
   --heading-font-family: 'Roboto', sans-serif;
-  --link-color: #126c00;
+  --link-color: #005774; /** #126c00; **/
   --darkest-color: #1b3d2f;
   --medium-color: #5a5a53;
   --light-color: #f2f0e9;
