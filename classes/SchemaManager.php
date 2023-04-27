@@ -3,6 +3,10 @@ include_once($SERVER_ROOT.'/classes/Manager.php');
 
 class SchemaManager extends Manager{
 
+	private $host;
+	private $database;
+	private $port;
+	private $username;
 	private $adminConn;
 	private $currentVersion;
 	private $targetSchema;
@@ -21,13 +25,13 @@ class SchemaManager extends Manager{
 		if($this->amendmentFH) fclose($this->amendmentFH);
 	}
 
-	public function installPatch($host, $username, $database, $port){
+	public function installPatch(){
 		if($this->targetSchema){
 			$this->logPath = $GLOBALS['SERVER_ROOT'] . '/content/logs/install/db_schema_patch-' . $this->targetSchema. '_'.date('Y-m-d').'.log';
 			$this->amendmentPath = $GLOBALS['SERVER_ROOT'] . '/content/logs/install/db_schema_patch-' . $this->targetSchema. '_' . time() . '_failed.sql';
 			$this->setVerboseMode(3);
 			$this->setLogFH($this->logPath);
-			if($this->setDatabaseConnection($host, $username, $database, $port)){
+			if($this->setDatabaseConnection()){
 				$this->logOrEcho('Connection to database established ('.date('Y-m-d H:i:s').')');
 				if($sqlArr = $this->readSchemaFile()){
 					/*
@@ -72,6 +76,7 @@ class SchemaManager extends Manager{
 								if($fragment) $sql .= ' ' . $fragment;
 							}
 						}
+						$sql = trim($sql, ',');
 						if($sql){
 							//$this->logOrEcho('Statement: ' . $sql, 1);
 							if($this->conn->query($sql)){
@@ -87,6 +92,7 @@ class SchemaManager extends Manager{
 									//Add these warnings to amendment file since they should be reapplied
 									if(!$this->amendmentFH) $this->amendmentFH = fopen($this->amendmentPath, 'w');
 									$this->logOrEcho('Following fragments excluded due to errors:', 2);
+									$failedSql = '';
 									foreach($this->warningArr as $errCode => $errArr){
 										foreach($errArr as $colName => $frag){
 											if($errCode == 'exists') $this->logOrEcho($colName.' already exists ', 3);
@@ -100,7 +106,10 @@ class SchemaManager extends Manager{
 							}
 							else{
 								if(!$this->amendmentFH) $this->amendmentFH = fopen($this->amendmentPath, 'w');
+								fwrite($this->amendmentFH, '# ERROR: '.$this->conn->error."\n\n");
+								fwrite($this->amendmentFH, $sql."\n\n");
 								$this->logOrEcho('ERROR: ' . $this->conn->error, 2);
+								$this->logOrEcho('SQL: ' . $sql, 2);
 								//break;
 							}
 						}
@@ -140,9 +149,15 @@ class SchemaManager extends Manager{
 							$delimiter = trim(substr($line, 9));
 						}
 						else{
-							if($line) $sqlArr[$index][] = $line;
+							if($line){
+								$preservedIndex = $index;
+								if(substr($line, -(strlen($delimiter))) == $delimiter){
+									$line = substr($line, 0, -(strlen($delimiter)));
+									$index = 0;
+								}
+								$sqlArr[$preservedIndex][] = $line;
+							}
 						}
-						if(substr($line, -strlen($delimiter)) == $delimiter) $index = 0;
 					}
 					$cnt++;
 				}
@@ -211,10 +226,10 @@ class SchemaManager extends Manager{
 	}
 
 	//Misc support functions
-	private function setDatabaseConnection($host, $username, $database, $port){
+	private function setDatabaseConnection(){
 		$password = filter_var($_POST['password'], FILTER_SANITIZE_STRING);
-		if($host && $username && $password && $database && $port){
-			$this->conn = new mysqli($host, $username, $password, $database, $port);
+		if($this->host && $this->username && $password && $this->database && $this->port){
+			$this->conn = new mysqli($this->host, $this->username, $password, $this->database, $this->port);
 			if($this->conn->connect_error){
 				$this->logOrEcho('Connection error: ' . $this->conn->connect_error);
 				return false;
@@ -242,6 +257,22 @@ class SchemaManager extends Manager{
 	}
 
 	//Setters and getters
+	public function setHost($h){
+		$this->host = $h;
+	}
+
+	public function setDatabase($db){
+		$this->database = $db;
+	}
+
+	public function setPort($p){
+		if(is_numeric($p)) $this->port = $p;
+	}
+
+	public function setUsername($u){
+		$this->username = $u;
+	}
+
 	public function getCurrentVersion(){
 		return $this->currentVersion;
 	}

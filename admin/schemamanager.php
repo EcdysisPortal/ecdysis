@@ -3,19 +3,20 @@ include_once('../config/symbini.php');
 include_once($SERVER_ROOT.'/classes/SchemaManager.php');
 header("Content-Type: text/html; charset=".$CHARSET);
 
-$host = MySQLiConnectionFactory::$SERVERS[0]['host'];
-if(isset($_POST['host'])) $host = filter_var($_POST['host']);
-$database = MySQLiConnectionFactory::$SERVERS[0]['database'];
-if(isset($_POST['database'])) $database = filter_var($_POST['database'], FILTER_SANITIZE_STRING);
-$port = MySQLiConnectionFactory::$SERVERS[0]['port'];
-if(isset($_POST['port'])) $port = filter_var($_POST['port'], FILTER_SANITIZE_NUMBER_INT);
 $username = isset($_POST['username']) ? filter_var($_POST['username'], FILTER_SANITIZE_STRING) : '';
 $schemaCode = isset($_POST['schemaCode']) ? filter_var($_POST['schemaCode'], FILTER_SANITIZE_STRING) : '';
 $action = isset($_POST['action']) ? $_POST['action'] : '';
 
+$host = filter_var(MySQLiConnectionFactory::$SERVERS[0]['host'], FILTER_SANITIZE_STRING);
+$database = filter_var(MySQLiConnectionFactory::$SERVERS[0]['database'], FILTER_SANITIZE_STRING);
+$port = filter_var(MySQLiConnectionFactory::$SERVERS[0]['port'], FILTER_SANITIZE_NUMBER_INT);
+
 $schemaManager = new SchemaManager();
 $verHistory = $schemaManager->getVersionHistory();
 $curentVersion = $schemaManager->getCurrentVersion();
+
+//if(!$IS_ADMIN && $curentVersion) header('Location: ../profile/index.php?refurl=../admin/schemamanager.php');
+$IS_ADMIN = true;
 ?>
 <html>
 	<head>
@@ -38,12 +39,31 @@ $curentVersion = $schemaManager->getCurrentVersion();
 		?>
 		<div id="innertext">
 			<h1>Database Schema Manager</h1>
-			<div style="margin:15px;">
-				<label>Current version: </label>
-				<?php echo $curentVersion?$curentVersion:'no schema detected'; ?>
-			</div>
 			<?php
 			if($IS_ADMIN || !$curentVersion){
+				if($action){
+					?>
+					<fieldset>
+						<legend>Action Panel</legend>
+						<?php
+						if($action == 'installSchema'){
+							$schemaManager->setTargetSchema($schemaCode);
+							$schemaManager->setHost($host);
+							$schemaManager->setDatabase($database);
+							$schemaManager->setPort($port);
+							$schemaManager->setUsername($username);
+							$schemaManager->installPatch();
+						}
+						?>
+					</fieldset>
+					<?php
+				}
+				?>
+				<div style="margin:15px;">
+					<label>Current version: </label>
+					<?php echo $curentVersion?$curentVersion:'no schema detected'; ?>
+				</div>
+				<?php
 				if($verHistory){
 					?>
 					<div style="margin:15px">
@@ -58,30 +78,20 @@ $curentVersion = $schemaManager->getCurrentVersion();
 					</div>
 					<?php
 				}
-				if($action){
-					?>
-					<fieldset>
-						<legend>Action Panel</legend>
-						<?php
-						if($action == 'installSchema'){
-							echo 'there';
-							$schemaManager->setTargetSchema($schemaCode);
-							$schemaManager->installPatch($host, $username, $database, $port);
-						}
-						?>
-					</fieldset>
-					<?php
-				}
 				?>
-				<fieldset>
+				<fieldset style="width:800px">
 					<legend>Database Schema Assistant</legend>
-					<div class="info-div">Enter database criteria that will be used to apply database schema patch.
-					The database user must have full DDL pivileges (e.g. create/alter tables, routines, indexes, etc.)
+					<div class="info-div">Enter login criteria for database user that has full DDL privileges (e.g. create/alter tables, routines, indexes, etc.).<br>
 					We recommend creating a backup of the database before applying any database patches.</div>
 					<form name="databaseMaintenanceForm" action="schemamanager.php" method="post">
 						<div class="form-section">
-							<label>Host:</label>
-							<input name="database" type="text" value="<?php echo $host; ?>" required>
+							<label>Schema: </label>
+							<select name="schemaCode">
+								<option value="1.0" <?php echo !$curentVersion || $curentVersion < 1 ? 'selected' : ''; ?>>Base Schema 1.0</option>
+								<option value="1.1"<?php echo $curentVersion == 1.0 ? 'selected' : ''; ?>>Schema Patch 1.1</option>
+								<option value="1.2"<?php echo $curentVersion == 1.1 ? 'selected' : ''; ?>>Schema Patch 1.2</option>
+								<option value="2.0"<?php echo $curentVersion == 1.2 ? 'selected' : ''; ?>>Schema Patch 2.0</option>
+							</select>
 						</div>
 						<div class="form-section">
 							<label>Username:</label>
@@ -92,21 +102,16 @@ $curentVersion = $schemaManager->getCurrentVersion();
 							<input name="password" type="password" value="" required autocomplete="off">
 						</div>
 						<div class="form-section">
+							<label>Host:</label>
+							<?php echo $host; ?>
+						</div>
+						<div class="form-section">
 							<label>Database:</label>
-							<input name="database" type="text" value="<?php echo $database; ?>" required>
+							<?php echo $database; ?>
 						</div>
 						<div class="form-section">
 							<label>Port:</label>
-							<input name="port" type="text" value="<?php echo $port; ?>" required>
-						</div>
-						<div class="form-section">
-							<label>Schema: </label>
-							<select name="schemaCode">
-								<option value="1.0" <?php echo !$curentVersion || $curentVersion < 1 ? 'selected' : ''; ?>>Base Schema 1.0</option>
-								<option value="1.1"<?php echo $curentVersion == 1.0 ? 'selected' : ''; ?>>Schema Patch 1.1</option>
-								<option value="1.2"<?php echo $curentVersion == 1.1 ? 'selected' : ''; ?>>Schema Patch 1.2</option>
-								<option value="2.0"<?php echo $curentVersion == 1.2 ? 'selected' : ''; ?>>Schema Patch 2.0</option>
-							</select>
+							<?php echo $port; ?>
 						</div>
 						<div class="form-section">
 							<button name="action" type="submit" value="installSchema">Install</button>
