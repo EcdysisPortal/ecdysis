@@ -10,18 +10,18 @@
 /* Variables
    ========================================================================== */
 :root {
-/**  --header-bg-image: url('../../../images/layout/header_background.jpg'); **/
-  --header-bg-color: #004f6a; /** #005774; Transparent color if adding header bg-image [add 78 to end] **/
+  --header-bg-image: url('../../../images/layout/header_background.jpg'); 
+  --header-bg-color: #004f6aee; /** #005774; Transparent color if adding header bg-image [add 78 to end] **/
   --header-font-color: #58b0eb; /** #17a2ff; **/
   --brand-font-size: 3rem;
   --title-font-family: 'Averia Serif Libre', serif;
-  --logo-width: 65px;
+  --logo-width: 80px;
   --menu-top-bg-color: #002633; /** #003141; **/
   --body-bg-color: #fafafa;
   --body-text-color: #000000;
   --body-font-size: 1.2rem;
   --body-font-family: 'Roboto', sans-serif;
-  --footer-bg-color: #f2f0e9;
+  --footer-bg-color: #004f6aee;
   --heading-font-family: 'Roboto', sans-serif;
   --link-color: #005774; /** #126c00; **/
   --darkest-color: #002633;
