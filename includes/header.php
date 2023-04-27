@@ -36,11 +36,10 @@ else include_once($SERVER_ROOT.'/content/lang/header.'.$LANG_TAG.'.php');
 				?>
 			</nav>
 			<div class="top-brand">
-				<a href="https://symbiota.org">
-					<img src="<?php echo $CLIENT_ROOT; ?>/images/ecdysis.png" alt="Ecdysis logo" style="max-height:130px;max-width:95%%">
-				</a>
+					<img src="<?php echo $CLIENT_ROOT; ?>/images/ecdysis_logo.png" alt="Ecdysis logo" style="width=80%">
 				<div class="brand-name">
-					<h2 style="font-size:24; color:#ff7417;"><?php echo (isset($LANG['H_SUBTITLE'])?$LANG['H_SUBTITLE']:'A portal for live-data arthropod collections')?></h2>
+					<h1 style="color:#ff7417">ecdysis</h1>
+					<h2 style="color:#ff7417"><?php echo (isset($LANG['H_SUBTITLE'])?$LANG['H_SUBTITLE']:'A portal for live-data arthropod collections')?></h2>
 				</div>
 			</div>
 		</div>
