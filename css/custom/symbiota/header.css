@@ -142,14 +142,14 @@ ul.menu {
 .menu a {
   display: block;
   color: var(--header-font-color);
-  font-size: 1.4rem;
+  font-size: 1.8rem;
   font-weight: 600;
   letter-spacing: 1px;
   text-align: center;
 }
 
 .menu li {
-  padding: 10px 20px;
+  padding: 10px 15px;
 }
 
 /* Toggles menu icon */

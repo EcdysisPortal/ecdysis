@@ -15,7 +15,7 @@
   --header-font-color: #58b0eb; /** #17a2ff; **/
   --brand-font-size: 3rem;
   --title-font-family: 'Averia Serif Libre', serif;
-  --logo-width: 100px;
+  --logo-width: 65px;
   --menu-top-bg-color: #002633; /** #003141; **/
   --body-bg-color: #fafafa;
   --body-text-color: #000000;
@@ -24,9 +24,9 @@
   --footer-bg-color: #f2f0e9;
   --heading-font-family: 'Roboto', sans-serif;
   --link-color: #005774; /** #126c00; **/
-  --darkest-color: #1b3d2f;
-  --medium-color: #5a5a53;
-  --light-color: #419fde;
+  --darkest-color: #002633;
+  --medium-color: #004f6a;
+  --light-color: #58b0eb;
   --bright-color: #ff8529;
   --max-innertext-width: 1024px;
 }
