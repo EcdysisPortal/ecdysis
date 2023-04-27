@@ -38,7 +38,7 @@ else include_once($SERVER_ROOT.'/content/lang/header.'.$LANG_TAG.'.php');
 			<div class="top-brand">
 					<img src="<?php echo $CLIENT_ROOT; ?>/images/ecdysis_logo.png" alt="Ecdysis logo" style="width=80%">
 				<div class="brand-name">
-					<h1 style="color:#ff7417">ecdysis</h1>
+					<h1 style="color:#ff7417;font-size:6rem">ecdysis</h1>
 					<h2 style="color:#ff7417"><?php echo (isset($LANG['H_SUBTITLE'])?$LANG['H_SUBTITLE']:'A portal for live-data arthropod collections')?></h2>
 				</div>
 			</div>
@@ -78,11 +78,6 @@ else include_once($SERVER_ROOT.'/content/lang/header.'.$LANG_TAG.'.php');
 					<li>
 						<a href="<?php echo $CLIENT_ROOT; ?>/includes/usagepolicy.php">
 							<?php echo (isset($LANG['H_DATA_USAGE'])?$LANG['H_DATA_USAGE']:'Data Use'); ?>
-						</a>
-					</li>
-					<li>
-						<a href="https://symbiota.org/docs" target="_blank" rel="noopener noreferrer">
-							<?php echo (isset($LANG['H_HELP'])?$LANG['H_HELP']:'Help'); ?>
 						</a>
 					</li>
 					<li>
