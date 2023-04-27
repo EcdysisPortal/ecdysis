@@ -17,7 +17,7 @@ $LANG['H_IMAGES'] = 'Images';
 $LANG['H_IMAGE_BROWSER'] = 'Image Browser';
 $LANG['H_IMAGE_SEARCH'] = 'Image Search';
 
-$LANG['H_INVENTORIES'] = 'Species Checklists';
+$LANG['H_INVENTORIES'] = 'Checklists';
 $LANG['H_CENTRAL_AMER'] = 'Central America';
 $LANG['H_ECUADOR'] = 'Ecuador';
 $LANG['H_SUBPOLAR'] = 'Subpolar Regions';

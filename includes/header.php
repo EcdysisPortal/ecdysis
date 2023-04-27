@@ -57,7 +57,7 @@ else include_once($SERVER_ROOT.'/content/lang/header.'.$LANG_TAG.'.php');
 					</li>
 					<li>
 						<a href="<?php echo $CLIENT_ROOT; ?>/collections/index.php">
-							<?php echo (isset($LANG['H_COLLECTIONS'])?$LANG['H_COLLECTIONS']:'Collections'); ?>
+							<?php echo (isset($LANG['H_SEARCH'])?$LANG['H_SEARCH']:'Search'); ?>
 						</a>
 					</li>
 					<li>
