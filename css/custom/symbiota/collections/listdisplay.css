@@ -49,3 +49,7 @@
 #omlisttable img {
     border: medium double #990000;
 }
+
+.icon-button {
+	background-color: var(--light-color);
+}
