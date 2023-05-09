@@ -285,7 +285,7 @@ class OccurrenceEditorManager {
 							$this->otherCatNumIsNum = true;
 							if(substr($v,0,1) == '0'){
 								//Add value with left padded zeros removed
-								$ocnInFrag[] = ltrim($vStr,0);
+								$ocnInFrag[] = ltrim($v,0);
 							}
 						}
 					}
@@ -489,7 +489,7 @@ class OccurrenceEditorManager {
 				}
 				elseif($customField == 'username'){
 					//Used when Modified By comes from custom field search within basic query form
-					$customField = 'ul.username';
+					$customField = 'u.username';
 				}
 				else{
 					$customField = 'o.'.$customField;
@@ -751,8 +751,8 @@ class OccurrenceEditorManager {
 		if(strpos($this->sqlWhere,'id.identifierValue')){
 			$sql .= 'LEFT JOIN omoccuridentifiers id ON o.occid = id.occid ';
 		}
-		if(strpos($this->sqlWhere,'ul.username')){
-			$sql .= 'LEFT JOIN omoccuredits ome ON o.occid = ome.occid LEFT JOIN userlogin ul ON ome.uid = ul.uid ';
+		if(strpos($this->sqlWhere,'u.username')){
+			$sql .= 'LEFT JOIN omoccuredits ome ON o.occid = ome.occid LEFT JOIN users u ON ome.uid = u.uid ';
 		}
 		if(strpos($this->sqlWhere,'exn.ometid')){
 			$sql .= 'INNER JOIN omexsiccatiocclink exocc ON o.occid = exocc.occid INNER JOIN omexsiccatinumbers exn ON exocc.omenid = exn.omenid ';
@@ -1155,7 +1155,8 @@ class OccurrenceEditorManager {
 		global $LANG;
 		$status = $LANG['SUCCESS_NEW_OCC_SUBMITTED'];
 		if($postArr){
-			$sql = 'INSERT INTO omoccurrences(collid, '.implode(',',array_keys($this->fieldArr['omoccurrences'])).') VALUES ('.$postArr['collid'];
+			$guid = UuidFactory::getUuidV4();
+			$sql = 'INSERT INTO omoccurrences(collid, recordID, '.implode(',',array_keys($this->fieldArr['omoccurrences'])).') VALUES ('.$postArr['collid'].', "'.$guid.'"';
 			//if(array_key_exists('cultivationstatus',$postArr) && $postArr['cultivationstatus']) $postArr['cultivationstatus'] = $postArr['cultivationstatus'];
 			//if(array_key_exists('localitysecurity',$postArr) && $postArr['localitysecurity']) $postArr['localitysecurity'] = $postArr['localitysecurity'];
 			if(!isset($postArr['dateentered']) || !$postArr['dateentered']) $postArr['dateentered'] = date('Y-m-d H:i:s');
@@ -1180,11 +1181,6 @@ class OccurrenceEditorManager {
 				$this->occid = $this->conn->insert_id;
 				//Update collection stats
 				$this->conn->query('UPDATE omcollectionstats SET recordcnt = recordcnt + 1 WHERE collid = '.$this->collId);
-				//Create and insert Symbiota GUID (UUID)
-				$guid = UuidFactory::getUuidV4();
-				if(!$this->conn->query('INSERT INTO guidoccurrences(guid,occid) VALUES("'.$guid.'",'.$this->occid.')')){
-					$status .= '('.$LANG['GUID_FAILED'].') ';
-				}
 				//Deal with identifiers
 				if(isset($postArr['idvalue'])) $this->updateIdentifiers($postArr);
 				//Deal with paleo
@@ -1404,10 +1400,11 @@ class OccurrenceEditorManager {
 				//Archive complete occurrence record
 				$archiveArr['dateDeleted'] = date('r').' by '.$USER_DISPLAY_NAME;
 				$archiveObj = json_encode($archiveArr);
-				$sqlArchive = 'UPDATE guidoccurrences '.
-					'SET archivestatus = 1, archiveobj = "'.$this->cleanInStr($this->encodeStrTargeted($archiveObj,'utf8',$CHARSET)).'" '.
-					'WHERE (occid = '.$delOccid.')';
-				//echo $sqlArchive;
+				$sqlArchive = 'INSERT INTO omoccurarchive(archiveobj, occid, catalogNumber, occurrenceID, recordID) '.
+					'VALUES ("'.$this->cleanInStr($this->encodeStrTargeted($archiveObj,'utf8',$CHARSET)).'", '.$delOccid.','.
+					(isset($archiveArr['catalogNumber']) && $archiveArr['catalogNumber']?'"'.$this->cleanInStr($archiveArr['catalogNumber']).'"':'NULL').', '.
+					(isset($archiveArr['occurrenceID']) && $archiveArr['occurrenceID']?'"'.$this->cleanInStr($archiveArr['occurrenceID']).'"':'NULL').', '.
+					(isset($archiveArr['recordID']) && $archiveArr['recordID']?'"'.$this->cleanInStr($archiveArr['recordID']).'"':'NULL').')';
 				$this->conn->query($sqlArchive);
 			}
 
@@ -1834,10 +1831,9 @@ class OccurrenceEditorManager {
 	public function getIdentificationRanking(){
 		//Get Identification ranking
 		$retArr = array();
-		$sql = 'SELECT v.ovsid, v.ranking, v.notes, l.username '.
-			'FROM omoccurverification v LEFT JOIN userlogin l ON v.uid = l.uid '.
+		$sql = 'SELECT v.ovsid, v.ranking, v.notes, u.username '.
+			'FROM omoccurverification v LEFT JOIN users u ON v.uid = u.uid '.
 			'WHERE v.category = "identification" AND v.occid = '.$this->occid;
-		//echo "<div>".$sql."</div>";
 		$rs = $this->conn->query($sql);
 		//There can only be one identification ranking per specimen
 		if($r = $rs->fetch_object()){
@@ -1865,50 +1861,41 @@ class OccurrenceEditorManager {
 		return $statusStr;
 	}
 
-	//Checklist voucher functions
-	public function getVoucherChecklists(){
-		$retArr = array();
-		$sql = 'SELECT c.clid, c.name FROM fmchecklists c INNER JOIN fmvouchers v ON c.clid = v.clid WHERE v.occid = '.$this->occid;
-		$rs = $this->conn->query($sql);
-		while($r = $rs->fetch_object()){
-			$retArr[$r->clid] = $r->name;
-		}
-		$rs->free();
-		asort($retArr);
-		return $retArr;
-	}
-
 	public function linkChecklistVoucher($clid,$tid){
 		global $LANG;
 		$status = '';
 		if(is_numeric($clid) && is_numeric($tid)){
 			//Check to see it the name is in the list, if not, add it
-			$clTid = 0;
-			$sqlCl = 'SELECT cl.tid '.
+			$clTaxaID = 0;
+			$sql = 'SELECT cl.clTaxaID '.
 				'FROM fmchklsttaxalink cl INNER JOIN taxstatus ts1 ON cl.tid = ts1.tid '.
 				'INNER JOIN taxstatus ts2 ON ts1.tidaccepted = ts2.tidaccepted '.
-				'WHERE (ts1.taxauthid = 1) AND (ts2.taxauthid = 1) AND (ts2.tid = '.$tid.') AND (cl.clid = '.$clid.')';
-			$rsCl = $this->conn->query($sqlCl);
-			//echo $sqlCl;
-			if($rowCl = $rsCl->fetch_object()){
-				$clTid = $rowCl->tid;
+				'WHERE (ts1.taxauthid = 1) AND (ts2.taxauthid = 1) AND (ts2.tid = ?) AND (cl.clid = ?)';
+			if($stmt = $this->conn->prepare($sql)){
+				$stmt->bind_param('ii', $tid, $clid);
+				$stmt->execute();
+				$stmt->bind_result($clTaxaID);
+				$stmt->fetch();
+				$stmt->close();
 			}
-			$rsCl->free();
-			if(!$clTid){
-				$sqlCl1 = 'INSERT INTO fmchklsttaxalink(clid, tid) VALUES('.$clid.','.$tid.') ';
-				if($this->conn->query($sqlCl1)){
-					$clTid = $tid;
-				}
-				else{
-					$status .= '('.$LANG['WARNING_ADD_SCINAME'].': '.$this->conn->error.'); ';
+			if(!$clTaxaID){
+				$sql = 'INSERT INTO fmchklsttaxalink(tid,clid) VALUES(?,?)';
+				if($stmt = $this->conn->prepare($sql)){
+					$stmt->bind_param('ii', $tid, $clid);
+					$stmt->execute();
+					if($stmt->affected_rows) $clTaxaID = $stmt->insert_id;
+					else $status .= '('.$LANG['WARNING_ADD_SCINAME'].': '.$stmt->error.'); ';
+					$stmt->close();
 				}
 			}
 			//Add voucher
-			if($clTid){
-				$sqlCl2 = 'INSERT INTO fmvouchers(occid,clid,tid) values('.$this->occid.','.$clid.','.$clTid.')';
-				//echo $sqlCl2;
-				if(!$this->conn->query($sqlCl2)){
-					$status .= '('.$LANG['WARNING_ADD_VOUCHER'].': '.$this->conn->error.'); ';
+			if($clTaxaID){
+				$sql = 'INSERT INTO fmvouchers(clTaxaID, occid) VALUES(?,?) ';
+				if($stmt = $this->conn->prepare($sql)){
+					$stmt->bind_param('ii', $clTaxaID, $this->occid);
+					$stmt->execute();
+					if(!$stmt->affected_rows) $status .= '('.$LANG['WARNING_ADD_VOUCHER'].': '.$stmt->error.'); ';
+					$stmt->close();
 				}
 			}
 		}
@@ -1919,7 +1906,7 @@ class OccurrenceEditorManager {
 		global $LANG;
 		$status = '';
 		if(is_numeric($clid)){
-			$sql = 'DELETE FROM fmvouchers WHERE clid = '.$clid.' AND occid = '.$this->occid;
+			$sql = 'DELETE v.* FROM fmvouchers v INNER JOIN fmchklsttaxalink c ON v.clTaxaID = c.clTaxaID WHERE c.clid = '.$clid.' AND v.occid = '.$this->occid;
 			if(!$this->conn->query($sql)){
 				$status = $LANG['ERROR_DELETING_VOUCHER'].': '.$this->conn->error;
 			}
@@ -2557,7 +2544,7 @@ class OccurrenceEditorManager {
 		return $newStr;
 	}
 
-	private function cleanRawFragment($str){
+	protected function cleanRawFragment($str){
 		$newStr = trim($str);
 		$newStr = $this->encodeStr($newStr);
 		$newStr = $this->conn->real_escape_string($newStr);

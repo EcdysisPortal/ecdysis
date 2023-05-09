@@ -1,5 +1,21 @@
 INSERT IGNORE INTO schemaversion (versionnumber) values ("3.0");
 
+CREATE TABLE `adminconfig` (
+  `configID` INT NOT NULL AUTO_INCREMENT,
+  `category` VARCHAR(45) NULL,
+  `attributeName` VARCHAR(45) NOT NULL,
+  `attributeValue` VARCHAR(1000) NOT NULL,
+  `dynamicProperties` text DEFAULT NULL,
+  `notes` VARCHAR(45) NULL,
+  `modifiedUid` INT UNSIGNED NULL,
+  `modifiedTimestamp` DATETIME NULL,
+  `initialTimestamp` TIMESTAMP NOT NULL DEFAULT current_timestamp,
+  PRIMARY KEY (`configID`),
+  INDEX `FK_adminConfig_uid_idx` (`modifiedUid` ASC),
+  UNIQUE INDEX `UQ_adminconfig_name` (`attributeName` ASC),
+  CONSTRAINT `FK_adminConfig_uid`  FOREIGN KEY (`modifiedUid`)  REFERENCES `users` (`uid`)  ON DELETE RESTRICT  ON UPDATE RESTRICT
+);
+
 ALTER TABLE `agents` 
   CHANGE COLUMN `taxonomicgroups` `taxonomicGroups` VARCHAR(900) NULL DEFAULT NULL ,
   CHANGE COLUMN `collectionsat` `collectionsAt` VARCHAR(900) NULL DEFAULT NULL ,
@@ -166,9 +182,11 @@ DROP TABLE IF EXISTS `fmchklsttaxastatus`;
 
 DROP TABLE IF EXISTS `fmcltaxacomments`;
 
+UPDATE fmchklsttaxalink SET morphospecies = '' WHERE morphospecies IS NULL;
+
 ALTER TABLE `fmchklsttaxalink` 
   ADD COLUMN `clTaxaID` INT UNSIGNED NOT NULL AUTO_INCREMENT FIRST,
-  CHANGE COLUMN `morphospecies` `morphospecies` VARCHAR(45) NULL DEFAULT '' ,
+  CHANGE COLUMN `morphospecies` `morphospecies` VARCHAR(45) NOT NULL DEFAULT '' ,
   DROP PRIMARY KEY,
   ADD PRIMARY KEY (`clTaxaID`),
   ADD UNIQUE INDEX `UQ_chklsttaxalink` (`CLID` ASC, `TID` ASC, `morphospecies` ASC);
@@ -186,18 +204,29 @@ ALTER TABLE `fmchklsttaxalink`
   CHANGE COLUMN `internalnotes` `internalNotes` VARCHAR(250) NULL DEFAULT NULL ,
   CHANGE COLUMN `InitialTimeStamp` `initialTimestamp` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP() ;
 
-
 ALTER TABLE `fmvouchers` 
   DROP PRIMARY KEY;
 
 ALTER TABLE `fmvouchers` 
-  ADD COLUMN `clVoucherID` INT UNSIGNED NOT NULL AUTO_INCREMENT FIRST,
-  ADD PRIMARY KEY (`clVoucherID`);
+  ADD COLUMN `voucherID` INT UNSIGNED NOT NULL AUTO_INCREMENT FIRST,
+  ADD PRIMARY KEY (`voucherID`);
 
 ALTER TABLE `fmvouchers` 
-  ADD COLUMN `clTaxaID` INT UNSIGNED NULL AFTER `clVoucherID`,
+  ADD COLUMN `clTaxaID` INT UNSIGNED NULL AFTER `voucherID`,
   ADD INDEX `FK_fmvouchers_occ_idx` (`occid` ASC),
   ADD INDEX `FK_fmvouchers_tidclid_idx` (`clTaxaID` ASC);
+
+ALTER TABLE `fmvouchers` 
+  ADD UNIQUE INDEX `UQ_fmvouchers_clTaxaID_occid` (`clTaxaID` ASC, `occid` ASC);
+
+UPDATE IGNORE fmvouchers v INNER JOIN fmchklsttaxalink c ON v.clid = c.clid AND v.tid = c.tid
+  SET v.clTaxaID = c.clTaxaID
+  WHERE v.clTaxaID IS NULL;
+
+#Fix if following statement falis: DELETE FROM fmvouchers WHERE clTaxaID IS NULL;
+ALTER TABLE `fmvouchers` 
+  CHANGE COLUMN `clTaxaID` `clTaxaID` INT(10) UNSIGNED NOT NULL ,
+  CHANGE COLUMN `CLID` `CLID` INT(10) UNSIGNED NULL ;
 
 ALTER TABLE `fmvouchers` 
   ADD CONSTRAINT `FK_fmvouchers_occ`  FOREIGN KEY (`occid`)  REFERENCES `omoccurrences` (`occid`)  ON DELETE CASCADE  ON UPDATE CASCADE,
@@ -214,13 +243,19 @@ ALTER TABLE `fmchklstcoordinates`
   CHANGE COLUMN `decimallongitude` `decimalLongitude` DOUBLE NOT NULL ,
   CHANGE COLUMN `initialtimestamp` `initialTimestamp` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP() ;
 
-
 ALTER TABLE `ctcontrolvocab` 
   ADD COLUMN `collid` INT UNSIGNED NULL DEFAULT NULL AFTER `cvID`,
   ADD INDEX `FK_ctControlVocab_collid_idx` (`collid` ASC);
 
 ALTER TABLE `ctcontrolvocab` 
   ADD CONSTRAINT `FK_ctControlVocab_collid`  FOREIGN KEY (`collid`)  REFERENCES `omcollections` (`CollID`)  ON DELETE CASCADE  ON UPDATE CASCADE;
+
+ALTER TABLE `ctcontrolvocab` 
+  CHANGE COLUMN `title` `title` VARCHAR(45) NOT NULL ,
+  CHANGE COLUMN `tableName` `tableName` VARCHAR(45) NOT NULL ,
+  CHANGE COLUMN `fieldName` `fieldName` VARCHAR(45) NOT NULL ,
+  ADD UNIQUE INDEX `UQ_ctControlVocab` (`title` ASC, `tableName` ASC, `fieldName` ASC);
+
 
 ALTER TABLE `fmprojects` 
   CHANGE COLUMN `projname` `projname` VARCHAR(75) NOT NULL ;
@@ -415,13 +450,9 @@ ALTER TABLE `omcollections`
   CHANGE COLUMN `InitialTimeStamp` `initialTimestamp` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP() ;
 
 ALTER TABLE `omcollections` 
-  ADD COLUMN `dwcTermJson` TEXT NULL AFTER `aggKeysStr`;
+  ADD COLUMN `dwcTermJson` TEXT NULL AFTER `aggKeysStr`,
+  ADD COLUMN `recordID` VARCHAR(45) NULL AFTER `dwcTermJson`;
 
-#ALTER TABLE `omcollections` 
-#  ADD COLUMN `collectionGuid` TEXT NULL AFTER `aggKeysStr`;
-
-ALTER TABLE `omcollections` 
-  ADD COLUMN `recordID` VARCHAR(45) NULL AFTER `aggKeysStr`;
 
 ALTER TABLE `omoccurdeterminations` 
   DROP FOREIGN KEY `FK_omoccurdets_idby`;
@@ -621,10 +652,11 @@ ALTER TABLE `omoccurdeterminations`
   ADD INDEX `IX_omoccurdets_recordID` (`recordID` ASC),
   ADD INDEX `FK_omoccurdets_dateModified` (`dateLastModified` ASC),
   ADD INDEX `FK_omoccurdets_initialTimestamp` (`initialTimestamp` ASC);
-  
+
+# Transfer GUIDs from old guid determination table  
 UPDATE omoccurdeterminations d INNER JOIN guidoccurdeterminations g ON d.detid = g.detid SET d.recordID = g.guid WHERE d.recordID IS NULL;
 
-
+# Transfer current determinations from omoccurrences table
 INSERT IGNORE INTO omoccurdeterminations(occid, identifiedBy, dateIdentified, family, sciname, verbatimIdentification, scientificNameAuthorship, tidInterpreted, 
 identificationQualifier, genus, specificEpithet, verbatimTaxonRank, infraSpecificEpithet, isCurrent, identificationReferences, identificationRemarks, 
 taxonRemarks)
@@ -743,10 +775,9 @@ ALTER TABLE `omoccurrences`
 
 
 
-#DROP TABLE IF EXISTS `portaloccurrences`;
-#DROP TABLE IF EXISTS `portalpublications`;
-#DROP TABLE IF EXISTS `portalindex`;
-
+#DROP TABLE IF EXISTS `portaloccurrences`
+#DROP TABLE IF EXISTS `portalpublications`
+#DROP TABLE IF EXISTS `portalindex`
 CREATE TABLE `portalindex` (
   `portalID` int(11) NOT NULL AUTO_INCREMENT,
   `portalName` varchar(150) NOT NULL,
@@ -810,12 +841,17 @@ CREATE TABLE `portaloccurrences` (
 
 
 ALTER TABLE `specprocessorprojects` 
-  ADD COLUMN `customStoredProcedure` VARCHAR(45) NULL AFTER `source`,
-  ADD COLUMN `createdByUid` INT UNSIGNED NULL AFTER `lastrundate`,
+  ADD COLUMN `additionalOptions` TEXT NULL AFTER `createLgImg`,
+  ADD COLUMN `createdByUid` INT UNSIGNED NULL AFTER `lastRunDate`,
+  ADD COLUMN `processingCode` INT NULL AFTER `source`,
+  CHANGE COLUMN `projecttype` `projectType` VARCHAR(45) NULL DEFAULT NULL,
+  CHANGE COLUMN `speckeyretrieval` `specKeyRetrieval` VARCHAR(45) NULL DEFAULT NULL,
+  CHANGE COLUMN `lastrundate` `lastRunDate` DATE NULL DEFAULT NULL,
   ADD INDEX `FK_specprocprojects_uid_idx` (`createdByUid` ASC);
 
 ALTER TABLE `specprocessorprojects`
   ADD CONSTRAINT `FK_specprocprojects_uid`  FOREIGN KEY (`createdByUid`)  REFERENCES `users` (`uid`)  ON DELETE SET NULL  ON UPDATE CASCADE;
+
 
 ALTER TABLE `taxa` 
   CHANGE COLUMN `TID` `tid` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT ,
@@ -835,11 +871,28 @@ ALTER TABLE `taxa`
 UPDATE IGNORE taxa SET author = "" WHERE author IS NULL;
 
 ALTER TABLE `taxa` 
-  CHANGE COLUMN `Author` `author` VARCHAR(150) NOT NULL DEFAULT "";
+  CHANGE COLUMN `Author` `author` VARCHAR(150) NOT NULL DEFAULT '';
+
+UPDATE taxa SET kingdomName = "" WHERE kingdomName IS NULL;
 
 ALTER TABLE `taxa` 
-  DROP INDEX `sciname_unique` ,
-  ADD UNIQUE INDEX `sciname_unique` (`SciName` ASC, `RankId` ASC);
+  CHANGE COLUMN `kingdomName` `kingdomName` VARCHAR(45) NOT NULL DEFAULT '' ,
+  CHANGE COLUMN `rankID` `rankID` SMALLINT(5) UNSIGNED NOT NULL DEFAULT 0 ;
+
+ALTER TABLE `taxa` 
+  DROP INDEX `sciname_unique`;
+
+# Following statement is the default unique index in the taxa table to support a multi-kingdom portal 
+# If UNIQUE INDEX fails, run following query below to identify duplicate records. Duplicates can be deleted, or you can apply the alternate index that supports the existance of homonyms 
+# Duplicate check: SELECT sciname, rankID, kingdomName, count(*) as cnt FROM taxa GROUP BY sciname, rankID, kingdomName HAVING cnt > 1
+ALTER TABLE `taxa` 
+  ADD UNIQUE INDEX `UQ_taxa_sciname` (`sciName` ASC, `rankId` ASC, `kingdomName` ASC);
+
+# The default UNIQUE INDEX applied above supports cross-kingdom homonyms
+# Alternate UNIQUE INDEX that support homonyms within a single kingdom (not recommended) 
+#  ALTER TABLE `taxa` ADD UNIQUE INDEX `UQ_taxa_sciname` (`sciName` ASC, `author` ASC, `rankId` ASC, `kingdomName` ASC)
+# Alternate more restrictive UNIQUE INDEX that can be used for a single kingdom portal. Cross-kingdom homonyms are not supported
+#  ALTER TABLE `taxa` ADD UNIQUE INDEX `UQ_taxa_sciname` (`sciName` ASC, `rankId` ASC)
   
 ALTER TABLE `taxstatus` 
   CHANGE COLUMN `taxonomicSource` `taxonomicSource` VARCHAR(500) NULL DEFAULT NULL;
@@ -891,13 +944,14 @@ ALTER TABLE `taxadescrblock`
 ALTER TABLE `taxadescrblock` 
   ADD CONSTRAINT `FK_taxadescrblock_tdProfileID`  FOREIGN KEY (`tdProfileID`)  REFERENCES `taxadescrprofile` (`tdProfileID`)  ON UPDATE CASCADE  ON DELETE CASCADE;
 
-
+# Test query if following UNIQUE INDEX fails: SELECT url, tid, count(*) as cnt FROM taxalinks GROUP BY url, tid HAVING cnt > 1
 ALTER TABLE `taxalinks` 
   ADD INDEX `FK_taxaLinks_tid` (`tid` ASC),
   ADD UNIQUE INDEX `UQ_taxaLinks_tid_url` (`tid` ASC, `url` ASC);
 
 ALTER TABLE `taxalinks` 
   DROP INDEX `Index_unique` ;
+
 
 ALTER TABLE `uploaddetermtemp` 
   ADD COLUMN `higherClassification` VARCHAR(150) NULL AFTER `dateIdentifiedInterpreted`,
@@ -982,8 +1036,11 @@ ALTER TABLE `users`
   ADD UNIQUE INDEX `UQ_users_username` (`username` ASC);
   
 ALTER TABLE `users` 
-  RENAME INDEX `Index_email` TO `IX_users_email`;
+  DROP INDEX `Index_email` ;
   
+ALTER TABLE `users` 
+  ADD INDEX `IX_users_email` (`lastName` ASC, `email` ASC);
+
 UPDATE users u INNER JOIN userlogin l ON u.uid = l.uid
 SET u.username = l.username, u.password = l.password, u.lastLoginDate = l.lastlogindate
 WHERE u.username IS NULL;
@@ -1036,12 +1093,12 @@ ALTER TABLE `ommaterialsample`
 
 # If following ALTER TABLE statement fails, run query below to identify records with duplicate material sample catalogNumbers for a given occurrence record. 
 # Catalog numbers need to be unique for each occurrence, thus duplicate records need to be removed.  
-# FIX: SELECT occid, catalogNumber, count(*) as cnt FROM ommaterialsample WHERE catalogNumber IS NOT NULL GROUP BY occid, catalogNumber HAVING cnt > 1;
+# FIX: SELECT occid, catalogNumber, count(*) as cnt FROM ommaterialsample WHERE catalogNumber IS NOT NULL GROUP BY occid, catalogNumber HAVING cnt > 1
 ALTER TABLE `ommaterialsample`
   ADD UNIQUE INDEX `UQ_ommatsample_catNum` (`occid`, `catalogNumber`);
 
 # If following ALTER TABLE statement fails, run query below to identify records with duplicate material sample guid values for a given occurrence record. GUIDs need to be unique for each occurrence. The duplicate records need to be removed.  
-# FIX: SELECT occid, guid, count(*) as cnt FROM ommaterialsample WHERE guid IS NOT NULL GROUP BY occid, guid HAVING cnt > 1;
+# FIX: SELECT occid, guid, count(*) as cnt FROM ommaterialsample WHERE guid IS NOT NULL GROUP BY occid, guid HAVING cnt > 1
 ALTER TABLE `ommaterialsample`
   ADD UNIQUE INDEX `UQ_ommatsample_guid` (`occid`, `guid`);
 
@@ -1132,3 +1189,46 @@ INSERT INTO ctcontrolvocabterm(cvID, term, resourceUrl, activeStatus) SELECT cvI
 INSERT INTO ctcontrolvocabterm(cvID, term, resourceUrl, activeStatus) SELECT cvID, "poolDnaExtracts", "http://gensc.org/ns/mixs/pool_dna_extracts", 1 FROM ctcontrolvocab WHERE tableName = "ommaterialsampleextended" AND fieldName = "fieldName";
 INSERT INTO ctcontrolvocabterm(cvID, term, resourceUrl, activeStatus) SELECT cvID, "sampleDesignation", "http://data.ggbn.org/schemas/ggbn/terms/sampleDesignation", 1 FROM ctcontrolvocab WHERE tableName = "ommaterialsampleextended" AND fieldName = "fieldName";
 
+
+#Rename for archive various deprecated tables 
+ALTER TABLE `guidimages` 
+  RENAME TO  `deprecated_guidimages` ;
+
+ALTER TABLE `guidoccurrences` 
+  RENAME TO  `deprecated_guidoccurrences` ;
+
+ALTER TABLE `guidoccurdeterminations` 
+  RENAME TO  `deprecated_guidoccurdeterminations` ;
+
+ALTER TABLE `userlogin` 
+  RENAME TO  `deprecated_userlogin` ;
+
+ALTER TABLE `adminstats` 
+  RENAME TO  `deprecated_adminstats` ;
+
+ALTER TABLE `imageannotations` 
+  RENAME TO  `deprecated_imageannotations` ;
+
+ALTER TABLE `kmdescrdeletions` 
+  RENAME TO  `deprecated_kmdescrdeletions` ;
+
+ALTER TABLE `media` 
+  RENAME TO  `deprecated_media` ;
+
+ALTER TABLE `omcollsecondary` 
+  RENAME TO  `deprecated_omcollsecondary` ;
+
+ALTER TABLE `unknowncomments` 
+  RENAME TO  `deprecated_unknowncomments` ;
+
+ALTER TABLE `unknownimages` 
+  RENAME TO  `deprecated_unknownimages` ;
+
+ALTER TABLE `unknowns` 
+  RENAME TO  `deprecated_unknowns` ;
+
+ALTER TABLE `omcollpublications` 
+  RENAME TO  `deprecated_omcollpublications` ;
+
+ALTER TABLE `omcollpuboccurlink` 
+  RENAME TO  `deprecated_omcollpuboccurlink` ;
