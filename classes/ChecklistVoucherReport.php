@@ -29,6 +29,7 @@ class ChecklistVoucherReport extends ChecklistVoucherAdmin {
 
 	public function getNonVoucheredCnt(){
 		$uvCnt = 0;
+    
 		if($this->clid){
 			$sql = 'SELECT count(c.clTaxaID) AS uvcnt
 				FROM fmchklsttaxalink c LEFT JOIN fmvouchers v ON c.clTaxaID = v.clTaxaID
@@ -44,6 +45,7 @@ class ChecklistVoucherReport extends ChecklistVoucherAdmin {
 
 	public function getNonVoucheredTaxa($startLimit, $limit = 100){
 		$retArr = Array();
+
 		if($this->clid){
 			$sql = 'SELECT ctl.clTaxaID, t.tid, ts.family, TRIM(CONCAT_WS(" ", t.sciname, ctl.morphoSpecies)) as sciname
 				FROM taxa t INNER JOIN taxstatus ts ON t.tid = ts.tid
@@ -59,12 +61,14 @@ class ChecklistVoucherReport extends ChecklistVoucherAdmin {
 				$retArr[$r->family][$r->clTaxaID]['t'] = $r->tid;
 			}
 			$rs->free();
+
 		}
 		return $retArr;
 	}
 
 	public function getNewVouchers($startLimit = 500, $includeAll = 1){
 		$retArr = Array();
+
 		if($this->clid){
 			if($sqlFrag = $this->getSqlFrag()){
 				if($includeAll == 1 || $includeAll == 2){
@@ -135,6 +139,7 @@ class ChecklistVoucherReport extends ChecklistVoucherAdmin {
 						$retArr[$r->clTaxaID][$r->occid]['eventdate'] = $r->eventdate;
 						$retArr[$r->clTaxaID][$r->occid]['locality'] = $r->locality;
 					}
+
 				}
 				$rs->free();
 			}
@@ -203,6 +208,7 @@ class ChecklistVoucherReport extends ChecklistVoucherAdmin {
 
 	public function getConflictVouchers(){
 		$retArr = Array();
+
 		$clidStr = $this->getClidFullStr();
 		if($clidStr){
 			$sql = 'SELECT DISTINCT cl.tid, cl.clid, TRIM(CONCAT_WS(" ",t.sciname,cl.morphoSpecies)) AS listid, o.recordedby, o.recordnumber, o.sciname, o.identifiedby, o.dateidentified, o.occid '.
@@ -236,6 +242,7 @@ class ChecklistVoucherReport extends ChecklistVoucherAdmin {
 				$cnt++;
 			}
 			$rs->free();
+
 		}
 		return $retArr;
 	}
@@ -254,6 +261,7 @@ class ChecklistVoucherReport extends ChecklistVoucherAdmin {
 	}
 
 	private function getMissingTaxaBaseSql($sqlFrag){
+
 		$clidStr = $this->getClidFullStr();
 		if($clidStr){
 			$retSql = 'FROM omoccurrences o LEFT JOIN omcollections c ON o.collid = c.collid '.
@@ -265,6 +273,7 @@ class ChecklistVoucherReport extends ChecklistVoucherAdmin {
 			if($idStr) $retSql .= 'AND (o.occid NOT IN('.$idStr.')) ';
 			$retSql .= 'AND (ts.tidaccepted NOT IN(SELECT ts.tidaccepted FROM fmchklsttaxalink cl INNER JOIN taxstatus ts ON cl.tid = ts.tid WHERE ts.taxauthid = 1 AND cl.clid IN('.$clidStr.'))) ';
 		}
+
 		return $retSql;
 	}
 
@@ -310,7 +319,9 @@ class ChecklistVoucherReport extends ChecklistVoucherAdmin {
 	}
 
 	private function getProblemTaxaSql($sqlFrag){
+
 		//$clidStr = $this->getClidFullStr();
+
 		$retSql = 'FROM omoccurrences o LEFT JOIN omcollections c ON o.collid = c.CollID '.
 			$this->getTableJoinFrag($sqlFrag).
 			'WHERE ('.$sqlFrag.') AND (o.tidinterpreted IS NULL) AND (o.sciname IS NOT NULL) ';
@@ -321,6 +332,7 @@ class ChecklistVoucherReport extends ChecklistVoucherAdmin {
 
 	private function getVoucherOccidStr(){
 		$idArr = array();
+
 		$clidStr = $this->getClidFullStr();
 		if($clidStr){
 			$sql = 'SELECT DISTINCT v.occid FROM fmvouchers v INNER JOIN fmchklsttaxalink c ON v.clTaxaID = c.clTaxaID WHERE c.clid IN('.$clidStr.')';
@@ -344,6 +356,7 @@ class ChecklistVoucherReport extends ChecklistVoucherAdmin {
 			}
 			$rs->free();
 		}
+
 		return implode(',',$idArr);
 	}
 
@@ -360,6 +373,7 @@ class ChecklistVoucherReport extends ChecklistVoucherAdmin {
 
 	public function downloadChecklistCsv(){
 		if($this->clid){
+
 			$clidStr = $this->getClidFullStr();
 			if($clidStr){
 				$fileName = $this->getExportFileName().'.csv';
@@ -379,6 +393,7 @@ class ChecklistVoucherReport extends ChecklistVoucherAdmin {
 					$fields = mysqli_fetch_fields($rs);
 					foreach ($fields as $val) {
 						$headerArr[] = $val->name;
+
 					}
 					$out = fopen('php://output', 'w');
 					fputcsv($out, $headerArr);
