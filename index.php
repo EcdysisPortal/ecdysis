@@ -50,7 +50,7 @@ header('Content-Type: text/html; charset=' . $CHARSET);
 				<p>Welcome to <b>ecdysis</b>, a portal for live-managing arthropod collections data. <b>ecdysis</b> is designed to serve the arthropod collections community as a robust and efficient environment for collections digitization and data management.</p>
 				<p>This portal is designed to work as one node within the online <a target="_blank" href="https://riojournal.com/article/8767">Biodiversity Knowledge Graph</a>.  Not intended to be a single portal to integrate all biodiversity data, <b>ecdysis</b> is built to interact with and share biodiversity data between other such portals. <b>ecdysis</b> instead provides access to management and research tools to arthropod collections and researchers.</p>
 				<img src="https://serv.biokic.asu.edu/ecdysis/images/fulgorids.jpg" style="display:block;width:98%;float:center;"/>
-				<p>Hosted by the <a target="_blank" href="https://biokic.asu.edu/">Biodiversity Knowledge Integration Center</a> at Arizona State University, please contact Andrew Johnston (ajohnston@asu.edu) with any questions or to have a collection profile established.</p> 
+				<p>Hosted by the <a target="_blank" href="https://biokic.asu.edu/">Biodiversity Knowledge Integration Center</a> at Arizona State University. To set up a new collection, report a bug, or get help with data transfers or portal tools - please submit a ticket through the <a href="https://help.symbiota.org/" target="_blank">Symbiota Support Hub Help Desk</a> For other ecdysis-related inquiries you may contact the portal manager Andrew Johnston (ajohnston@asu.edu) or the ecdysis steering committee chair Sangmi Lee (slee281@asu.edu).</p> 
 				
 			</div>
 			<?php
