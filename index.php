@@ -36,6 +36,7 @@ header('Content-Type: text/html; charset=' . $CHARSET);
 				<h1 style="text-align:center;">Acerca de ecdysis</h1>
 				<p>Bienvenidos a <b>ecdysis</b> - un portal para el manejo datos de ocurrencia de artrópodos en tiempo real. El portal <b>ecdysis</b> está diseñado para proporcionar un ambiente eficiente para la digitalización de colecciones y proyectos de investigación basados en datos, para la comunidad de colecciones entomológicas. La comunidad de  <b>ecdysis</b> está abierta y da la bienvenida a todas las colecciones e individuos que deseen publicar, manejar y analizar datos de ocurrencia de artrópodos, especialmente de especímenes digitalizados.</p>
 				<p>Visite nuestra <a href="<?php echo $CLIENT_ROOT; ?>/misc/contacts.php">página de Contactos</a> para más información acerca del portal, el comité directivo y más recursos de ayuda.</p>
+				<p>Guía en español para digitalizar especímenes disponible <a target="_blank" href="https://serv.biokic.asu.edu/ecdysis/InstruccionesEcdysis.pdf">aquí</a>, elaborada por Samanta Orellana (sorellana@asu.edu).</p>
 
 				<br><br>
 				<h3>Las siguientes herramientas están disponibles para los usuarios del portal:</h3>
