@@ -62,7 +62,7 @@ else include_once($SERVER_ROOT.'/content/lang/header.'.$LANG_TAG.'.php');
 					</li>
 					<li>
 						<a href="<?php echo $CLIENT_ROOT; ?>/collections/map/index.php" target="_blank" rel="noopener noreferrer">
-							<?php echo (isset($LANG['H_MAP_SEARCH'])?$LANG['H_MAP_SEARCH']:'Map Search'); ?>
+							<?php echo (isset($LANG['H_MAP'])?$LANG['H_MAP']:'Map Search'); ?>
 						</a>
 					</li>
 					<li>
@@ -76,8 +76,8 @@ else include_once($SERVER_ROOT.'/content/lang/header.'.$LANG_TAG.'.php');
 						</a>
 					</li>
 					<li>
-						<a href="<?php echo $CLIENT_ROOT; ?>/includes/usagepolicy.php">
-							<?php echo (isset($LANG['H_DATA_USAGE'])?$LANG['H_DATA_USAGE']:'Data Use'); ?>
+						<a href="<?php echo $CLIENT_ROOT; ?>/misc/contacts.php">
+							<?php echo (isset($LANG['H_CONTACTS'])?$LANG['H_CONTACTS']:'Contacts'); ?>
 						</a>
 					</li>
 					<li>

@@ -29,7 +29,7 @@
 /* Global styles
    ========================================================================== */
 html {
-  font-size: 10px; /* 1rem = 10px */
+  font-size: 12px; /* 1rem = 10px */
 }
 
 body {
@@ -318,3 +318,13 @@ table.styledtable tr.alt td {
     font-size: 2.5rem;
   }
 }
+
+/* Ecdysis custom css additions
+====================================================================== */
+.hometext li {
+	font-size: 1.4rem;
+	text-align: left;
+	line-height:1.5rem;
+	padding: 5px 8px;
+}
+
