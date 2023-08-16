@@ -32,12 +32,17 @@ header('Content-Type: text/html; charset=' . $CHARSET);
 		<?php
 		if($LANG_TAG == 'es'){
 			?>
-			<div style="max-width:700px;text-align:center;margin:0 auto;">
+			<div style="max-width:900px;text-align:center;margin:0 auto;">
 				<h1 style="text-align:center;">Acerca de ecdysis</h1>
 				<p>Bienvenidos a <b>ecdysis</b> - un portal para el manejo datos de ocurrencia de artrópodos en tiempo real. El portal <b>ecdysis</b> está diseñado para proporcionar un ambiente eficiente para la digitalización de colecciones y proyectos de investigación basados en datos, para la comunidad de colecciones entomológicas. La comunidad de  <b>ecdysis</b> está abierta y da la bienvenida a todas las colecciones e individuos que deseen publicar, manejar y analizar datos de ocurrencia de artrópodos, especialmente de especímenes digitalizados.</p>
 				<p>Visite nuestra <a href="<?php echo $CLIENT_ROOT; ?>/misc/contacts.php">página de Contactos</a> para más información acerca del portal, el comité directivo y más recursos de ayuda.</p>
 				<p>Guía en español para digitalizar especímenes disponible <a target="_blank" href="https://serv.biokic.asu.edu/ecdysis/InstruccionesEcdysis.pdf">aquí</a>, elaborada por Samanta Orellana (sorellana@asu.edu).</p>
 
+				<div style="max-width:100%;margin:3 3;">
+				<h3 >Distribución de las colecciones en ecdysis</h3>
+				<img src="<?php echo $CLIENT_ROOT; ?>/images/worldmap.png" style="display:inline-block;width:49%;justify-content:space-around;padding:3;"><img src="<?php echo $CLIENT_ROOT; ?>/images/usmap.png" style="display:inline-block;width:49%;justify-content:space-around;padding:3;">
+				</div>
+				
 				<br><br>
 				<h3>Las siguientes herramientas están disponibles para los usuarios del portal:</h3>
 				<h4 style="text-align:left;padding-left:15px;">Herramientas de manejo de Colecciones</h4>
@@ -74,11 +79,17 @@ header('Content-Type: text/html; charset=' . $CHARSET);
 		else{
 			//Default Language
 			?>
-			<div style="max-width:700px;text-align:center;margin:0 auto;">
+			<div style="max-width:900px;text-align:center;margin:0 auto;">
 				<h1 style="text-align:center;">About ecdysis</h1>
 				<p>Welcome to <b>ecdysis</b> - a portal for live-managing arthropod occurrence data. <b>ecdysis</b> is designed to serve the entomological community as a robust and efficient environment for collections digitization and data-driven research projects. The <b>ecdysis</b> community is open to and welcomes all collections and individuals who wish to publish, manage, and analyze arthropod occurrence data - especially in the form of digitized specimens.</p>
 				<p>Visit our <a href="<?php echo $CLIENT_ROOT; ?>/misc/contacts.php">Contact page</a> for more information about the portal, its steering committee, and more help and resources.</p>
 
+
+				<div style="max-width:100%;margin:3 3;">
+				<h3 >Distribution of collections within ecdysis</h3>
+				<img src="<?php echo $CLIENT_ROOT; ?>/images/worldmap.png" style="display:inline-block;width:49%;justify-content:space-around;padding:3;"><img src="<?php echo $CLIENT_ROOT; ?>/images/usmap.png" style="display:inline-block;width:49%;justify-content:space-around;padding:3;">
+				</div>
+				
 				<br><br>
 				<h3>The following tools are available to portal users:</h3>
 				<h4 style="text-align:left;padding-left:15px;">Collection management tools</h4>
