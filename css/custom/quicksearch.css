@@ -11,7 +11,7 @@
 }
 
 #quicksearchtext{
-	font-size:1.7rem;
+	font-size:1.5rem;
 	line-height: 2.5rem;
 	text-align:center;
 	font-weight:600;
@@ -24,7 +24,7 @@
 	padding-top:3px;
 	padding-bottom:2px;
 	font-family: Arial, Helvetica, sans-serif;
-	line-height: 1.2rem;
+	line-height: 1.1rem;
 }
 
 #quicksearchbutton{
