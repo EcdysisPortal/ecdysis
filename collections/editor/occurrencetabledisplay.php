@@ -17,7 +17,7 @@ if(!is_numeric($recLimit)) $recLimit = 1000;
 if(!is_numeric($occIndex)) $occIndex = false;
 if(!is_numeric($crowdSourceMode)) $crowdSourceMode = 0;
 if(!is_numeric($dynamicTable)) $dynamicTable = 0;
-$action = filter_var($action,FILTER_SANITIZE_STRING);
+$action = htmlspecialchars($action, HTML_SPECIAL_CHARS_FLAGS);
 
 $occManager = new OccurrenceEditorManager();
 

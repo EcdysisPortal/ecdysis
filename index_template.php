@@ -4,7 +4,8 @@ if($LANG_TAG == 'en' || !file_exists($SERVER_ROOT.'/content/lang/index.'.$LANG_T
 else include_once($SERVER_ROOT.'/content/lang/index.'.$LANG_TAG.'.php');
 header('Content-Type: text/html; charset=' . $CHARSET);
 ?>
-<html>
+<!DOCTYPE html>
+<html lang="<?php echo $LANG_TAG ?>">
 <head>
 	<title><?php echo $DEFAULT_TITLE; ?> Home</title>
 	<?php
