@@ -837,9 +837,14 @@ class SpecUploadBase extends SpecUpload{
 			if($this->collMetadataArr["managementtype"] == 'Snapshot' || $this->uploadType == $this->SKELETAL){
 				//Match records that were processed via the portal, walked back to collection's central database, and come back to portal
 				$this->outputMsg('<li style="margin-left:10px;">Populating source identifiers (dbpk) to relink specimens processed within portal...</li>');
-				$sql = 'UPDATE IGNORE uploadspectemp u INNER JOIN omoccurrences o ON (u.catalogNumber = o.catalogNumber) AND (u.collid = o.collid) '.
-					'SET u.occid = o.occid, o.dbpk = u.dbpk '.
-					'WHERE (u.collid IN('.$this->collId.')) AND (u.occid IS NULL) AND (o.dbpk IS NULL) AND (u.catalogNumber IS NOT NULL) ';
+				$sql = 'UPDATE IGNORE uploadspectemp u INNER JOIN omoccurrences o ON (u.occurrenceID = o.occurrenceID) AND (u.collid = o.collid)
+					SET u.occid = o.occid, o.dbpk = u.dbpk
+					WHERE (u.collid IN('.$this->collId.')) AND (u.occid IS NULL) AND (o.dbpk IS NULL) ';
+				$this->conn->query($sql);
+
+				$sql = 'UPDATE IGNORE uploadspectemp u INNER JOIN omoccurrences o ON (u.catalogNumber = o.catalogNumber) AND (u.collid = o.collid)
+					SET u.occid = o.occid, o.dbpk = u.dbpk
+					WHERE (u.collid IN('.$this->collId.')) AND (u.occid IS NULL) AND (o.dbpk IS NULL)';
 				$this->conn->query($sql);
 			}
 
@@ -1574,9 +1579,20 @@ class SpecUploadBase extends SpecUpload{
 			if($this->sourceDatabaseType == 'specify' && (!isset($recMap['occurrenceid']) || !$recMap['occurrenceid'])){
 				if(strlen($recMap['dbpk']) == 36) $recMap['occurrenceid'] = $recMap['dbpk'];
 			}
+			try {
+				$this->buildPaleoJSON($recMap);
+			} catch (Exception $e){
+				$this->outputMsg('<li>Error JSON encoding paleo data for record #'.$this->transferCount.'</li>');
+				$this->outputMsg('<li style="margin-left:10px;">Error: '.$e->getMessage().'</li>');
+			}
+			try {
+				$this->buildMaterialSampleJSON($recMap);
+			} catch (Exception $e){
+				$this->outputMsg('<li>Error JSON encoding material sample data for record #'.$this->transferCount.'</li>');
+				$this->outputMsg('<li style="margin-left:10px;">Error: '.$e->getMessage().'</li>');
+			}
+			
 
-			$this->buildPaleoJSON($recMap);
-			$this->buildMaterialSampleJSON($recMap);
 			$sqlFragments = $this->getSqlFragments($recMap,$this->occurFieldMap);
 			if($sqlFragments){
 				$sql = 'INSERT INTO uploadspectemp(collid'.$sqlFragments['fieldstr'].') VALUES('.$this->collId.$sqlFragments['valuestr'].')';
@@ -1610,7 +1626,12 @@ class SpecUploadBase extends SpecUpload{
 					unset($recMap[$k]);
 				}
 			}
-			if($paleoArr) $recMap['paleoJSON'] = json_encode($paleoArr);
+			if($paleoArr){
+				$recMap['paleoJSON'] = json_encode($paleoArr);
+				if(json_last_error() !== JSON_ERROR_NONE){
+					throw new Exception("JSON encoding error: ".json_last_error_msg());
+				}
+			}
 		}
 	}
 
@@ -1624,7 +1645,12 @@ class SpecUploadBase extends SpecUpload{
 					unset($recMap[$fieldName]);
 				}
 			}
-			if($msArr) $recMap['materialSampleJSON'] = json_encode($msArr);
+			if($msArr){
+				$recMap['materialSampleJSON'] = json_encode($msArr);
+				if(json_last_error() !== JSON_ERROR_NONE){
+					throw new Exception("JSON encoding error: ".json_last_error_msg());
+				}
+			}
 		}
 	}
 

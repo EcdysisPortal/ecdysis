@@ -321,7 +321,7 @@ class DwcArchiverOccurrence extends Manager{
 			elseif($this->schemaType == 'coge'){
 				$targetArr = array('id','basisOfRecord','institutionCode','collectionCode','catalogNumber','occurrenceID','family','scientificName','scientificNameAuthorship',
 					'kingdom','phylum','class','order','genus','specificEpithet','infraSpecificEpithet','recordedBy','recordNumber','eventDate','year','month','day','fieldNumber',
-					'locationID','continent','waterBody','islandGroup','island','country','stateProvince','county','municipality',
+					'eventID', 'locationID','continent','waterBody','islandGroup','island','country','stateProvince','county','municipality',
 					'locality','localitySecurity','geodeticDatum','decimalLatitude','decimalLongitude','verbatimCoordinates',
 					'minimumElevationInMeters','maximumElevationInMeters','verbatimElevation','maximumDepthInMeters','minimumDepthInMeters','establishmentMeans',
 					'occurrenceRemarks','dateEntered','dateLastModified','recordID','references','collID');
@@ -352,7 +352,7 @@ class DwcArchiverOccurrence extends Manager{
 			$sqlFrag .= ', t.rankid';
 			$sql = 'SELECT DISTINCT '.trim($sqlFrag,', ');
 		}
-		$sql .= ' FROM omoccurrences o LEFT JOIN omcollections c ON o.collid = c.collid '.
+		$sql .= ' FROM omoccurrences o INNER JOIN omcollections c ON o.collid = c.collid '.
 			'LEFT JOIN taxa t ON o.tidinterpreted = t.TID ';
 		if($this->includePaleo) $sql .= 'LEFT JOIN omoccurpaleo paleo ON o.occid = paleo.occid ';
 		//if($fullSql) $sql .= ' ORDER BY c.collid ';

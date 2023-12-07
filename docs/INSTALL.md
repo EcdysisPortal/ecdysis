@@ -8,7 +8,7 @@
   - Recommended configuration adjustments: upload_max_filesize = 100M (or expected file size upload), max_input_vars = 2000, memory_limit = 256M, post_max_size = 100M
   - Optional: Pear package Image_Barcode2 (https://pear.php.net/package/Image_Barcode2) – enables barcodes on specimen labels
   - Optional: Install Pear Mail for SMTP mail support: https://pear.php.net/package/Mail/redirected
-- MariaDB (v10.3+) or MySQL (v5.7+)
+- MariaDB (v10.3+) 
 - GIT Client - not required, though recommend for installation and updating source code
 
 ## INSTRUCTIONS
@@ -57,6 +57,10 @@
    - /content/geolocate/
    - /content/logs/
    - /temp/ 
+5. Misc configurations and recommendations 
+   - Install robots.txt file within root directory - The robots.txt file is a standard method used by websites to indicate to visiting web crawlers and other web robots which portions of the website they are allowed to visit and under what conditions. A robots.txt template can be found within the /includes directory. This file should be moved into the domain's root directory, which may of may not be the Symbiota root directory. The file paths listed within the file should be adjusted to match the portal installation path (e.g. start with $CLIENT_ROOT). See links below for more information:   
+     - https://developers.google.com/search/docs/crawling-indexing/robots/create-robots-txt  
+     - https://en.wikipedia.org/wiki/Robots.txt
 
 ## DATA
 
