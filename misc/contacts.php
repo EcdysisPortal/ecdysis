@@ -43,13 +43,12 @@ include_once('content/lang/misc/aboutproject.'.$LANG_TAG.'.php');
 			<h4>Integrantes del Comité Directivo:</h4>
 			<ul class="hometext">
 			<li><b>Jennifer Girón</b>, Acting Collections Manager of Invertebrate Zoology, Museum of Texas Tech University. ORCID: <a target="_blank" href="https://orcid.org/0000-0002-0851-6883">https://orcid.org/0000-0002-0851-6883</a></li>
-			<li><b>Andrew Johnston</b>, Invertebrate Collections Manager, NEON Biorepository, Arizona State University. ORCID: <a target="_blank" href="https://orcid.org/0000-0002-0166-6985">https://orcid.org/0000-0002-0166-6985</a></li>
+			<li><b>Andrew Johnston</b>, Assistant Professor of Practice, Entomology Department, Purdue University. ORCID: <a target="_blank" href="https://orcid.org/0000-0002-0166-6985">https://orcid.org/0000-0002-0166-6985</a></li>
 			<li><b>Sangmi Lee</b>, Researcher Specialist Sr. and Collections Manager of ASU Insects and Mollusks, Biodiversity Knowledge Integration Center, Arizona State University. ORCID: <a target="_blank" href="https://orcid.org/0000-0002-9636-8242">https://orcid.org/0000-0002-9636-8242</a></li>
 			<li><b>Samanta Orellana</b>, Ph.D. Candidate, School of Life Sciences, Arizona State University. ORCID: <a target="_blank" href="https://orcid.org/0000-0002-4098-5823">https://orcid.org/0000-0002-4098-5823</a></li>
 			<li><b>Katja C. Seltmann</b>, Researcher and Katherine Esau Director, Cheadle Center for Biodiversity and Ecology Restoration, University of California, Santa Barbara. ORCID: <a target="_blank" href="https://orcid.org/0000-0001-5354-6048">https://orcid.org/0000-0001-5354-6048</a></li>
 			<li><b>Lindsay J. Walker</b>, Community Manager, Symbiota Support Hub, Arizona State University. ORCID: <a target="_blank" href="https://orcid.org/0000-0002-2162-6593">https://orcid.org/0000-0002-2162-6593</a></li>
 			</ul>
-			<p>Para consultas acerca del comité directivo, por favor contactar a la directora actual Sangmi Lee (slee281@asu.edu). Para soporte técnico o problemas relacionados con el portal, por favor contactar al administrador del portal Andrew Johnston (ajohnston@asu.edu).</p>
 
 		<?php
 		}
@@ -75,13 +74,12 @@ include_once('content/lang/misc/aboutproject.'.$LANG_TAG.'.php');
 			<h4>Steering Committee members:</h4>
 			<ul class="hometext">
 			<li><b>Jennifer Girón</b>, Acting Collections Manager of Invertebrate Zoology, Museum of Texas Tech University. ORCID: <a target="_blank" href="https://orcid.org/0000-0002-0851-6883">https://orcid.org/0000-0002-0851-6883</a></li>
-			<li><b>Andrew Johnston</b>, Invertebrate Collections Manager, NEON Biorepository, Arizona State University. ORCID: <a target="_blank" href="https://orcid.org/0000-0002-0166-6985">https://orcid.org/0000-0002-0166-6985</a></li>
+			<li><b>Andrew Johnston</b>, Assistant Professor of Practice, Entomology Department, Purdue University. ORCID: <a target="_blank" href="https://orcid.org/0000-0002-0166-6985">https://orcid.org/0000-0002-0166-6985</a></li>
 			<li><b>Sangmi Lee</b>, Researcher Specialist Sr. and Collections Manager of ASU Insects and Mollusks, Biodiversity Knowledge Integration Center, Arizona State University. ORCID: <a target="_blank" href="https://orcid.org/0000-0002-9636-8242">https://orcid.org/0000-0002-9636-8242</a></li>
 			<li><b>Samanta Orellana</b>, Ph.D. Candidate, School of Life Sciences, Arizona State University. ORCID: <a target="_blank" href="https://orcid.org/0000-0002-4098-5823">https://orcid.org/0000-0002-4098-5823</a></li>
 			<li><b>Katja C. Seltmann</b>, Researcher and Katherine Esau Director, Cheadle Center for Biodiversity and Ecology Restoration, University of California, Santa Barbara. ORCID: <a target="_blank" href="https://orcid.org/0000-0001-5354-6048">https://orcid.org/0000-0001-5354-6048</a></li>
 			<li><b>Lindsay J. Walker</b>, Community Manager, Symbiota Support Hub, Arizona State University. ORCID: <a target="_blank" href="https://orcid.org/0000-0002-2162-6593">https://orcid.org/0000-0002-2162-6593</a></li>
 			</ul>
-			<p>For inquiries about the steering committee, please contact the chair Sangmi Lee (slee281@asu.edu). For technical or portal-related issues, please contact the portal manager Andrew Johnston (ajohnston@asu.edu).</p>
 			<?php
 		}
 		?>
