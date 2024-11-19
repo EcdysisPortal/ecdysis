@@ -11,5 +11,7 @@
 
 $LANG['H_SUBTITLE'] = 'Um portal para gerenciamento de dados de coleções de artrópodes, em tempo real';
 $LANG['QSEARCH_SEARCH'] = 'Pesquisa rápida por táxon';
+$LANG['H_CLASSIC_SEARCH'] = 'Pesquisa Clássica';
+$LANG['H_NEW_SEARCH'] = 'Nova Pesquisa';
 
 ?>

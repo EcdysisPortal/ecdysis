@@ -11,5 +11,7 @@
 
 $LANG['H_SUBTITLE'] = 'A portal for live-data arthropod collections';
 $LANG['QSEARCH_SEARCH'] = 'Quick Search by Taxon';
+$LANG['H_CLASSIC_SEARCH'] = 'Classic Search';
+$LANG['H_NEW_SEARCH'] = 'New Search';
 
 ?>
