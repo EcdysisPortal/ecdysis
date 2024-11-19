@@ -9,6 +9,7 @@
  e.g. override: $LANG['H_COLLECTIONS'] = 'Search Lichen Collections';
 */
 
-
+$LANG['H_SUBTITLE'] = 'Um portal para gerenciamento de dados de coleções de artrópodes, em tempo real';
+$LANG['QSEARCH_SEARCH'] = 'Pesquisa rápida por táxon';
 
 ?>

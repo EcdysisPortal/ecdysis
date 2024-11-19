@@ -731,7 +731,7 @@ if ($SYMB_UID) {
 					include($SERVER_ROOT . '/includes/citationcollection.php');
 				}
 				echo '</blockquote></div>';
-			}
+			} 
 			if ($addrArr = $collManager->getAddress()) {
 				?>
 				<section class="fieldset-like no-left-margin">

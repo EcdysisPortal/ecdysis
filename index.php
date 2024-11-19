@@ -1,31 +1,31 @@
 <?php
 include_once('config/symbini.php');
-if($LANG_TAG == 'en' || !file_exists($SERVER_ROOT.'/content/lang/index.'.$LANG_TAG.'.php')) include_once($SERVER_ROOT.'/content/lang/index.en.php');
-else include_once($SERVER_ROOT.'/content/lang/index.'.$LANG_TAG.'.php');
+if($LANG_TAG == 'en' || !file_exists($SERVER_ROOT.'/content/lang/templates/index.'.$LANG_TAG.'.php')) include_once($SERVER_ROOT.'/content/lang/templates/index.en.php');
+else include_once($SERVER_ROOT.'/content/lang/templates/index.'.$LANG_TAG.'.php');
 header('Content-Type: text/html; charset=' . $CHARSET);
 ?>
-<html>
+<!DOCTYPE html>
+<html lang="<?php echo $LANG_TAG ?>">
 <head>
 	<title><?php echo $DEFAULT_TITLE; ?> Home</title>
 	<?php
 	include_once($SERVER_ROOT . '/includes/head.php');
 	include_once($SERVER_ROOT . '/includes/googleanalytics.php');
 	?>
-	<link href="<?php echo $CSS_BASE_PATH; ?>/quicksearch.css" type="text/css" rel="stylesheet">
 </head>
 <body>
 	<?php
 	include($SERVER_ROOT . '/includes/header.php');
 	?>
 	<div class="navpath"></div>
-	<div id="innertext">
+	<main id="innertext">
 
         <div id="quicksearchdiv">
                <!-- QUICK SEARCH SETTINGS -->
              <form name="quicksearch" id="quicksearch" action="<?php echo $CLIENT_ROOT; ?>/taxa/index.php" method="get" onsubmit="return verifyQuickSearch(this);">
-             <div id="quicksearchtext" ><?php echo (isset($LANG['QSEARCH_SEARCH'])?$LANG['QSEARCH_SEARCH']:'Quick Search by Taxon'); ?></div>
+             <div id="quicksearchtext" style="text-align:center;font-weight:bold"><?= $LANG['QSEARCH_SEARCH']; ?></div>
              <input id="taxa" type="text" name="taxon" />
-             <button name="formsubmit"  id="quicksearchbutton" type="submit" value="Search Terms"><?php echo (isset($LANG['QSEARCH_SEARCH_BUTTON'])?$LANG['QSEARCH_SEARCH_BUTTON']:'Search'); ?></button>
+             <button name="formsubmit"  id="quicksearchbutton" type="submit" value="Search Terms"><?= $LANG['QSEARCH_SEARCH_BUTTON'] ?></button>
              </form>
        </div>
 	
@@ -124,7 +124,7 @@ header('Content-Type: text/html; charset=' . $CHARSET);
 			<?php
 		}
 		?>
-	</div>
+	</main>
 	<?php
 	include($SERVER_ROOT . '/includes/footer.php');
 	?>
