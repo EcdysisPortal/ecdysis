@@ -67,10 +67,10 @@ $collectionSearchPage = $SHOULD_USE_HARVESTPARAMS ? '/collections/index.php' : '
 						<a href="#"><?= $LANG['H_SEARCH'] ?></a>
 						<ul>
 							<li>
-								<a href="<?= $CLIENT_ROOT ?>/collections/index.php"><?= $LANG['H_CLASSIC_SEARCH'] ?></a>
+								<a href="<?= $CLIENT_ROOT . $collectionSearchPage ?>"><?= $LANG['H_NEW_SEARCH'] ?></a>
 							</li>
 							<li>
-								<a href="<?= $CLIENT_ROOT . $collectionSearchPage ?>"><?= $LANG['H_NEW_SEARCH'] ?></a>
+								<a href="<?= $CLIENT_ROOT ?>/collections/index.php"><?= $LANG['H_CLASSIC_SEARCH'] ?></a>
 							</li>
 						</ul>
 					</li>
@@ -92,11 +92,6 @@ $collectionSearchPage = $SHOULD_USE_HARVESTPARAMS ? '/collections/index.php' : '
 					<li>
 						<a href="<?php echo $CLIENT_ROOT; ?>/misc/contacts.php">
 							<?php echo (isset($LANG['H_CONTACTS'])?$LANG['H_CONTACTS']:'Contacts'); ?>
-						</a>
-					</li>
-					<li>
-						<a href='<?php echo $CLIENT_ROOT; ?>/sitemap.php'>
-							<?php echo (isset($LANG['H_SITEMAP'])?$LANG['H_SITEMAP']:'Sitemap'); ?>
 						</a>
 					</li>
 					<li>

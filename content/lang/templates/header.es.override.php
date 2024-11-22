@@ -13,5 +13,6 @@ $LANG['H_SUBTITLE'] = 'Un portal para el manejo de datos de colecciones de artr�
 $LANG['QSEARCH_SEARCH'] = 'Búsqueda Rápida por Taxón';
 $LANG['H_CLASSIC_SEARCH'] = 'Búsqueda Clásica';
 $LANG['H_NEW_SEARCH'] = 'Nueva Búsqueda';
+$LANG['H_INVENTORIES'] = 'Listas';
 
 ?>

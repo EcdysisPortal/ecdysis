@@ -4,14 +4,14 @@
   --header-bg-image: url('../../../ecdysis/images/layout/header_background.jpg'); 
   --header-bg-color: #004f6aee; /** Transparent color if adding header bg-image **/
   --header-font-color: #ff8529;
-  --brand-font-size: 4rem;
+  --brand-font-size: 4.5rem;
   --title-font-family: "Averia Serif Libre", serif;
   --logo-width: 80px;
   --menu-top-bg-color: #002633;
-  --menu-font-size: 1.2rem;
+  --menu-font-size: 1.4rem;
   --body-bg-color: #fafafa;
   --body-text-color: #000000;
-  --body-font-size: 1.2rem;
+  --body-font-size: 1rem;
   --body-font-family: "Roboto", sans-serif;
   --footer-bg-color: #004f6a;
   --heading-font-family: "Roboto", sans-serif;
