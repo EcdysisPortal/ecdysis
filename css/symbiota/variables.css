@@ -1,7 +1,7 @@
 /* Variables
    ========================================================================== */
 :root {
-  --header-bg-image: url('../../../ecdysis/images/layout/header_background.jpg'); 
+  --header-bg-image: url('../../images/layout/header_background.jpg'); 
   --header-bg-color: #004f6aee; /** Transparent color if adding header bg-image **/
   --header-font-color: #ff8529;
   --brand-font-size: 4.5rem;
