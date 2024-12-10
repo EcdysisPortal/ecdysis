@@ -54,7 +54,7 @@ $collectionSearchPage = $SHOULD_USE_HARVESTPARAMS ? '/collections/index.php' : '
 		<div class="menu-wrapper">
 			<!-- Hamburger icon -->
 			<input class="side-menu" type="checkbox" id="side-menu" />
-			<label class="hamb" for="side-menu"><span class="hamb-line"></span></label>
+			<label class="hamb hamb-line hamb-label" for="side-menu">☰</label>
 			<!-- Menu -->
 			<nav class="top-menu">
 				<ul class="menu">
