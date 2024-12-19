@@ -66,3 +66,10 @@ footer a {
 	color: var(--light-color);
 	cursor: pointer;
   }
+
+  .button-tertiary {
+	background-color: transparent;
+	border: 1px solid var(--bright-color);
+	padding: 0.5rem 0.9rem;
+	color: var(--bright-color);
+  }
