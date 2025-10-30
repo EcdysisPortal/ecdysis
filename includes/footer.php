@@ -9,9 +9,6 @@
 		<a href="https://biodiversity.ku.edu" target="_blank" title="<?= $LANG['F_KU-BI'] ?>" aria-label="<?= $LANG['F_KU-BI'] ?>">
 			<img src="<?= $CLIENT_ROOT; ?>/images/layout/ku-bi_logo.png"  alt="<?= $LANG['F_KU-BI_LOGO'] ?>" />
 		</a>
-		!--<a href="https://biokic.asu.edu" target="_blank" title="Biodiversity Knowledge Integration Center">
-			<img src="<?php echo $CLIENT_ROOT; ?>/images/layout/logo-asu-biokic.png" />
-		</a>-->
 		<a href="https://symbiota.org" target="_blank" title="Symbiota">
 			<img src="<?php echo $CLIENT_ROOT; ?>/images/layout/logo_symbiota.png" />
 		</a>
