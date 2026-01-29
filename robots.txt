@@ -1,0 +1,21 @@
+User-agent: Googlebot
+User-agent: Bingbot
+User-agent: Slurp
+User-agent: DuckDuckBot
+Crawl-delay: 120
+Allow: /
+Disallow: /checklists/checklist.php?clid=*&
+Disallow: /collections/datasets/emlhandler.php
+Disallow: /collections/individual/
+Disallow: /collections/list.php
+Disallow: /collections/misc/collprofiles.php?collid=*&
+Disallow: /collections/search/
+Disallow: /games/
+Disallow: /ident/key.php?clid=*&
+Disallow: /projects/index.php?pid=*&
+Disallow: ?*refurl=
+Disallow: /taxa/index.php?taxon=*&
+Disallow: /taxa/taxonomy/*
+
+User-agent: *
+Disallow: /
