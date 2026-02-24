@@ -706,7 +706,7 @@ if ($SYMB_UID) {
 					include($SERVER_ROOT . '/includes/citationcollection.php');
 				}
 				echo '</blockquote></div>';
-			}
+			} 
 			if ($addrArr = $collManager->getAddress()) {
 				?>
 				<section class="fieldset-like no-left-margin">
@@ -942,13 +942,9 @@ if ($SYMB_UID) {
 				</form>
 			</div>
 			<div>
-				<form name="image-search-form" action="<?= $CLIENT_ROOT ?>/imagelib/search.php" method="get">
-					<input name="db" value="<?= $collid ?>" type="hidden">
-					<input name="imagetype" value="1" type="hidden">
-					<button name="submitaction" type="submit" value="search" class="button button-primary">
-						<?= $LANG['IMAGE_SEARCH_THIS_COLLECTION'] ?>
-					</button>
-				</form>
+				<span class="button button-primary bottom-breathing-room-rel">
+					<a id="image-search" href="<?= $CLIENT_ROOT ?>/imagelib/search.php?submitaction=search&db[]=<?= $collid ?>" ><?= $LANG['IMAGE_SEARCH_THIS_COLLECTION'] ?></a>
+				</span>
 			</div>
 			<?php
 		} elseif($collectionData) {

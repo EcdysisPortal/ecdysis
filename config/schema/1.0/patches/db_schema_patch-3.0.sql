@@ -224,6 +224,7 @@ UPDATE IGNORE fmvouchers v INNER JOIN fmchklsttaxalink c ON v.clid = c.clid AND 
   WHERE v.clTaxaID IS NULL;
 
 #Fix if following statement falis: DELETE FROM fmvouchers WHERE clTaxaID IS NULL
+
 ALTER TABLE `fmvouchers` 
   CHANGE COLUMN `clTaxaID` `clTaxaID` INT(10) UNSIGNED NOT NULL ,
   CHANGE COLUMN `CLID` `CLID` INT(10) UNSIGNED NULL ;
