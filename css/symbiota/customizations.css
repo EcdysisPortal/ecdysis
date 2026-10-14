@@ -3,3 +3,73 @@ Place your CSS customizations here.
 This stylesheet is defined last and will override all previously loaded sheets. You may reference variables defined in variables.css 
  */
  
+ .hometext li {
+	font-size: 1rem;
+	text-align: left;
+	line-height:1.5rem;
+	padding: 5px 8px;
+}
+
+/* Different text color than main header */
+.menu a {
+	display: block;
+	color: var(--light-color);
+	font-weight: 600;
+	letter-spacing: 1px;
+	text-align: left;
+  }
+
+  /*Smaller font size for subtitle */
+  
+  .brand-name h2 {
+	font-size: calc(var(--brand-font-size) * 0.4);
+  }
+
+  #quicksearchdiv{
+	width: 400px;
+	margin-top: 8px;
+	margin-bottom: 8px;
+	margin-left: auto;
+	margin-right: auto;
+	padding: 5px 5px 0px 5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border: 2px solid #ff8529;	
+}
+
+#quicksearchtext{
+}
+
+#quicksearch input{
+	width: 250px;
+	float: left;
+	margin-bottom:0px;
+	padding-bottom:0px;
+	margin:10px;
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+#quicksearchbutton{
+	margin-left:10px;
+	margin-top:10px;
+	margin-bottom:10px;
+	padding-bottom:0px;
+}
+
+footer a {
+	transition: all 0.2s ease-in-out;
+	color: var(--bright-color);
+	font-weight: 600;
+  }
+  
+  footer a:hover {
+	color: var(--light-color);
+	cursor: pointer;
+  }
+
+  .button-tertiary {
+	background-color: transparent;
+	border: 1px solid var(--bright-color);
+	padding: 0.5rem 0.9rem;
+	color: var(--bright-color);
+  }
