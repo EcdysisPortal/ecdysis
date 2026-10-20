@@ -2,7 +2,7 @@ const template_values = {
 	domain: window.location.hostname.toUpperCase(),
 	donate_url: Donate_link
 };
-const ask_lang = { ...verbage, ...overrides };
+const ask_lang = { ...common, ...overrides };
 const banner_style = document.createElement('style');
 
 banner_style.textContent = `

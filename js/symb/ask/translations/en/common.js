@@ -1,4 +1,4 @@
-const verbage = {
+const common = {
     header: 'Hello Portal User!',
     main: (content) => `<p style="font-size:17px; font-weight:600;">Do you use and love ${content.domain} and its collections?</p>
         <p>This portal, and others like it, relies on a <strong>small, dedicated group of people</strong>, the Symbiota Support Hub (SSH) for website support.</p>
