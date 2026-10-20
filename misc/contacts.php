@@ -77,7 +77,7 @@ include_once('content/lang/misc/aboutproject.'.$LANG_TAG.'.php');
 			<li><b>Jennifer Girón</b>, Acting Collections Manager of Invertebrate Zoology, Museum of Texas Tech University. ORCID: <a target="_blank" href="https://orcid.org/0000-0002-0851-6883">https://orcid.org/0000-0002-0851-6883</a></li>
 			<li><b>Andrew Johnston</b>, Assistant Professor of Practice, Entomology Department, Purdue University. ORCID: <a target="_blank" href="https://orcid.org/0000-0002-0166-6985">https://orcid.org/0000-0002-0166-6985</a></li>
 			<li><b>Sangmi Lee</b>, Researcher Specialist Sr. and Collections Manager of ASU Insects and Mollusks, Biodiversity Knowledge Integration Center, Arizona State University. ORCID: <a target="_blank" href="https://orcid.org/0000-0002-9636-8242">https://orcid.org/0000-0002-9636-8242</a></li>
-			<li><b>Samanta Orellana</b>, Ph.D. Candidate, School of Life Sciences, Arizona State University. ORCID: <a target="_blank" href="https://orcid.org/0000-0002-4098-5823">https://orcid.org/0000-0002-4098-5823</a></li>
+			<li><b>Samanta Orellana</b>, Postoctoral Researcher, Biodiversity Institute, University of Kansas. ORCID: <a target="_blank" href="https://orcid.org/0000-0002-4098-5823">https://orcid.org/0000-0002-4098-5823</a></li>
 			<li><b>Katja C. Seltmann</b>, Researcher and Katherine Esau Director, Cheadle Center for Biodiversity and Ecology Restoration, University of California, Santa Barbara. ORCID: <a target="_blank" href="https://orcid.org/0000-0001-5354-6048">https://orcid.org/0000-0001-5354-6048</a></li>
 			</ul>
 			<?php
